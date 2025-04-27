@@ -5,6 +5,7 @@ from datetime import  datetime
 
 from pydantic import BaseModel, ConfigDict
 
+from .employeeInfo import GetFullEmpInfoModel
 from .item_transactions import GetFullTransactions1, BaseTransactions, GetFullEmployeeWithTransactions
 
 class Order(enum.Enum):
@@ -40,6 +41,9 @@ class  EmployeeFullSchema(BaseEmployeeSchema,TimeSchema):
 
 class  EmployeeWithUseSchema(BaseEmployeeSchema,TimeSchema):
   uid: uuid.UUID
+  employee_info_model : GetFullEmpInfoModel | None = None
+
+class  EmployeeWithUseSchema2(EmployeeWithUseSchema):
   item_transaction_model_em: List[GetFullEmployeeWithTransactions] = []
 
 

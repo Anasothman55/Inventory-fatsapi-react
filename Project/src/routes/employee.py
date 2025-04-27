@@ -6,7 +6,7 @@ from fastapi import APIRouter, status, Depends, Path, Query, Form
 
 from ..db.models import UserModel, EmployeeModel
 from ..dependencies.auth import require_roles, get_current_user
-from ..schema.employee import BaseEmployeeSchema, Order, OrderBy,EmployeeWithInfoSchema, EmployeeFullSchema, EmployeeWithUseSchema
+from ..schema.employee import BaseEmployeeSchema, EmployeeWithUseSchema2, Order, OrderBy,EmployeeWithInfoSchema, EmployeeFullSchema, EmployeeWithUseSchema
 from ..schema.auth import RoleBase
 from ..utils.employee import EmployeeRepository, get_employee_repo
 from ..services.employee import (
@@ -26,10 +26,15 @@ see_role_des = f"""this route can use by all {RoleBase.ADMIN} and {RoleBase.ACCO
 admin_des = f"""this route can use by all {RoleBase.ADMIN} users"""
 
 
+from .employeeInfo import route as emp_info_route
+
 route = APIRouter(
   dependencies=[Depends(get_current_user)],
-  tags=["Employees"]
+  tags=["Employees"],
+  
 )
+
+route.include_router(emp_info_route, prefix="/employee-info")
 
 @route.get('/', response_model= List[EmployeeWithUseSchema], status_code= status.HTTP_200_OK)
 async def get_all_employee(
@@ -52,7 +57,7 @@ async def create_category(
   return result
 
 
-@route.get('/{uid}',  status_code= status.HTTP_200_OK, response_model=EmployeeWithUseSchema)
+@route.get('/{uid}',  status_code= status.HTTP_200_OK, response_model=EmployeeWithUseSchema2)
 async def get_one_categories(
     repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
     uid: Annotated[uuid.UUID, Path(...)]

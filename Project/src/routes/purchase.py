@@ -1,10 +1,13 @@
 from rich import  print
 
 from typing import Annotated, List
-from fastapi import APIRouter,  Query, status, HTTPException, Form, Depends, Path
+from fastapi import APIRouter,  Query, Request, status, HTTPException, Form, Depends, Path
 
 import uuid
 
+from src.utils.items import ItemsRepository, get_items_repo
+from src.utils.purchase_items import PurchasesItemsRepository, get_purchases_items_repo
+from ..utils.purchase import PurchasesRepository, get_purchases_repo
 from ..schema.auth import RoleBase
 from ..schema.purchase import (
   BasePurchaseSchema,
@@ -17,7 +20,6 @@ from ..schema.purchase import (
 )
 from ..db.models import UserModel
 from ..dependencies.auth import get_current_user, require_roles
-from ..utils.purchase import PurchasesRepository, get_purchases_repo
 from ..services.purchase import (
   get_one_purchase_services,
   create_purchase_services,
@@ -41,7 +43,7 @@ route = APIRouter(
 
 
 @route.get('/',description=see_role_des, status_code= status.HTTP_200_OK, response_model=List[GetFullPurchaseSchema])
-async def get_all_items(
+async def get_all_purchase(
     repo: Annotated[PurchasesRepository, Depends(get_purchases_repo)],
     order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
     order: Annotated[Order, Query()] = Order.ASC,
@@ -51,7 +53,7 @@ async def get_all_items(
 
 
 @route.post("/", description=alter_role_des,status_code=status.HTTP_201_CREATED, response_model=GetFullPurchaseSchema)
-async def create_items(
+async def create_purchase(
     req_data: Annotated[CreatePurchaseSchema, Form()],
     current_user: Annotated[UserModel, Depends(require_roles(alter_role))],
     repo: Annotated[PurchasesRepository, Depends(get_purchases_repo)],
@@ -60,7 +62,7 @@ async def create_items(
   return res
 
 @route.get('/{uid}', description=see_role_des, status_code= status.HTTP_200_OK, response_model=GetPurchaseItemsSchema)
-async def get_one_items(
+async def get_one_purchase(
     uid: Annotated[uuid.UUID, Path()],
     repo: Annotated[PurchasesRepository, Depends(get_purchases_repo)],
 ):
@@ -68,7 +70,7 @@ async def get_one_items(
   return res
 
 @route.patch("/{uid}",description=alter_role_des, status_code=status.HTTP_200_OK, response_model=BasePurchaseSchema)
-async def update_items(
+async def update_purchase(
     current_user: Annotated[UserModel, Depends(require_roles(alter_role))],
     uid: Annotated[uuid.UUID, Path()],
     new_data: Annotated[UpdatePurchaseSchema, Form()],
@@ -78,9 +80,11 @@ async def update_items(
   return res
 
 @route.delete("/{uid}",description=admin_des, status_code=status.HTTP_204_NO_CONTENT)
-async def delete_items(
+async def delete_purchase(
+    request: Request,
     current_user: Annotated[UserModel, Depends(require_roles([RoleBase.ADMIN]))],
     uid: Annotated[uuid.UUID, Path()],
     repo: Annotated[PurchasesRepository, Depends(get_purchases_repo)],
+    item_purchase_repo: Annotated[PurchasesItemsRepository, Depends(get_purchases_items_repo)],
 ):
-  await delete_purchase_services(repo, uid)
+  await delete_purchase_services(repo, uid,item_purchase_repo, request.cookies)

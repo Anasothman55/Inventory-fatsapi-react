@@ -1,9 +1,17 @@
 
+from typing import Dict
 import  uuid
+import asyncio
+import httpx 
+
 
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 
+from rich import print
+
+from src.utils.items import ItemsRepository
+from src.utils.purchase_items import PurchasesItemsRepository
 
 from ..db.models import  PurchaseModel
 from ..utils.purchase import PurchasesRepository, check_purchase_unique
@@ -45,7 +53,17 @@ async def update_purchase_services(
   return result
 
 
-async def delete_purchase_services(repo: PurchasesRepository, uid: uuid.UUID) -> None:
+async def delete_purchase_services(
+    repo: PurchasesRepository, 
+    uid: uuid.UUID, 
+    item_purchase_repo: PurchasesItemsRepository,
+    cookies: Dict
+    ) -> None:
+
   purchase = await get_one_purchase_services(repo,uid)
+  pi = await item_purchase_repo.get_by_purchase_uid(purchase.uid)
+  for i in pi:
+    async with httpx.AsyncClient(cookies=cookies) as client:
+      await client.delete(f'http://127.0.0.1:8000/purchase-items/{i.uid}')
   await repo.delete_row(purchase)
   return None

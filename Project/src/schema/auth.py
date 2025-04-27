@@ -36,7 +36,7 @@ class UserBase(BaseModel):
 
 class GetFullUser(UserBase):
   uid: uuid.UUID | None = None
-  role: str
+  role: List[str] = []
   is_active: bool
   last_login_date: datetime | None = None
   created_at: datetime
@@ -56,12 +56,14 @@ class AdminCreateIUserDict(BaseModel):
   username: str | None = None
   email: str | None = None
   password: str | None = None
-  role: Optional[RoleBase] = None
+  role: List[RoleBase] = []
+  
+
 
   @field_validator("role", mode="before")
   @classmethod
   def empty_string_to_none(cls, v):
-    if v == "":
+    if len(v) == 0:
       return None
     return v
 

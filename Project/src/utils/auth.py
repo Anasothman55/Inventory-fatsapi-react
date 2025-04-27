@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 from fastapi import  Response
 from sqlalchemy import Select
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, AsyncResult
 from sqlmodel import desc, asc,select
 from jose import jwt, JWTError, ExpiredSignatureError 
 from pydantic import EmailStr,ValidationError
@@ -39,8 +39,8 @@ class UserRepositoryUtils:
   def __init__(self, db: AsyncSession):
     self.db = db
     self.model = UserModel
-  async def _statement(self,  field: str, value: Any):
-    statement = ( select(self.model).where(getattr(self.model, field) == value))
+  async def _statement(self,  field: str, value: Any) -> AsyncResult:
+    statement = (select(self.model).where(getattr(self.model, field) == value))
     return await self.db.execute(statement)
 
   async def get_by_email(self, email: EmailStr) -> UserModel:
@@ -52,9 +52,10 @@ class UserRepositoryUtils:
   async def get_by_uid(self, uid: uuid.UUID) -> UserModel:
     res = await self._statement("uid", uid)
     return res.scalars().first()
-  async def get_by_role(self, role: str) -> UserModel:
-    res =  await self._statement("role", role)
-    return res.scalar_one_or_none()
+  async def get_by_role(self, role: list[str]) -> UserModel:
+    st = select(self.model).where(self.model.role.contains(role))
+    res = await self.db.execute(st)
+    return res.scalars().all()
 
   async def _commit_refresh(self, row):
     await self.db.commit()

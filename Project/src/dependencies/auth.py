@@ -37,11 +37,15 @@ async def get_current_user(
   return user_data
 
 
+print([1,2,3,4].index(2))
+
+
 def require_roles(allowed_roles: List[RoleBase]):
   def role_checker( current_user: Annotated[UserModel, Depends(get_current_user)])-> UserModel:
-    if current_user.role not in allowed_roles:
-      raise AuthorizationError
-    return current_user
+    if RoleBase.ADMIN in current_user.role:
+      return current_user
+    if ( r not in allowed_roles for r in current_user.role):
+      raise AuthorizationError(RoleBase)
   return role_checker
 
 

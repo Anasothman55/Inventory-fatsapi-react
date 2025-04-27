@@ -50,14 +50,14 @@ async def init_db():
   async with async_session_maker() as db:
     # Check if an admin user already exists
     user_repo = UserRepositoryUtils(db)
-    result = await user_repo.get_by_role('admin')
+    result = await user_repo.get_by_role(['admin'])
 
     if not result:
       dumped = {
         'username': 'Admin',
         'email': 'anasothman581@gmail.com',
         'password': hash_password_utils('anasadmin'),
-        'role': 'admin'
+        'role': ['admin']
       }
 
       res = await user_repo.create(dumped)

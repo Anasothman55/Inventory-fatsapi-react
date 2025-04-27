@@ -6,22 +6,22 @@ from ..schema.categories import Order, OrderBy
 from .items import ItemsRepository
 
 from sqlalchemy.orm import selectinload
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, AsyncResult
 from sqlmodel import select,desc, asc
 
 from decimal import Decimal
-from typing import Any, Annotated, Callable
+from typing import Any, Annotated, Callable, List
 import uuid
 
 class PurchasesItemsRepository:
   def __init__(self, db):
     self.db = db
     self.model = PurchaseItemsModel
+  
 
-  async def _statement(self, field: str, value: Any):
+  async def _statement(self, field: str, value: Any) -> AsyncResult:
     statement = select(self.model).where(getattr(self.model, field) == value)
-    result = await self.db.execute(statement)
-    return result.scalars().first()
+    return await self.db.execute(statement)
 
   async def _commit_refresh(self, row):
     await self.db.commit()
@@ -34,17 +34,22 @@ class PurchasesItemsRepository:
 
 
   async def get_by_uid(self, uid: uuid.UUID):
-    return await self._statement(field="uid", value=uid)
-
+    res =  await self._statement(field="uid", value=uid)
+    return res.scalars().first()
   async def get_by_quantity(self, quantity: int):
-    return await self._statement(field="quantity", value=quantity)
-
+    res = await self._statement(field="quantity", value=quantity)
+    return res.scalars().first()
   async def get_by_unite_price(self, unite_price: Decimal):
-    return await self._statement(field="unite_price", value=unite_price)
-
+    res =  await self._statement(field="unite_price", value=unite_price)
+    return res.scalars().first()
   async def get_by_subtotal_price(self, subtotal_price: Decimal):
-    return await self._statement(field="subtotal_price", value= subtotal_price)
-
+    res =  await self._statement(field="subtotal_price", value= subtotal_price)
+    return res.scalars().first()
+  
+  async def get_by_purchase_uid(self, purchas_uid: uuid.UUID) -> List[PurchaseItemsModel]:
+    res = await self._statement(field="purchas_uid", value= purchas_uid)
+    return res.scalars().all()
+  
   async def get_all(self, order: Order, order_by: OrderBy):
     order_column = getattr(self.model, order_by.value )
 

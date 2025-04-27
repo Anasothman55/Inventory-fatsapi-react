@@ -15,6 +15,16 @@ class EmployeeNotFound(EmployeeExceptions):
     )
 
 
+class EmployeeInfoDontExist(EmployeeExceptions):
+  def __init__(self, name):
+    super().__init__(
+      status_code=status.HTTP_404_NOT_FOUND,
+      detail= {
+        "error": f"{name} don't have info yet please create it",
+      }
+    )
+
+
 class EmployeeAlreadyExists(EmployeeExceptions):
   def __init__(self, name):
     message = f"Employee with name {name} already exists"
@@ -24,3 +34,14 @@ class EmployeeAlreadyExists(EmployeeExceptions):
         "error": message,
       }
     )
+
+
+class EmployeeInfoIntigrity(EmployeeExceptions):
+  def __init__(self, error):
+    super().__init__(
+      status_code=status.HTTP_409_CONFLICT,
+      detail= {
+        "error": error,
+      }
+    )
+

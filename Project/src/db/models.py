@@ -1,14 +1,13 @@
-from numpy.ma.core import true_divide
-from sqlalchemy import Column, TIMESTAMP, DateTime,Date, false
+from sqlalchemy import Column, TIMESTAMP, DateTime,Date,ARRAY, String
 from sqlmodel import  SQLModel,Field, Relationship,DECIMAL, Date
 from sqlalchemy.sql import func
 import sqlalchemy.dialects.postgresql as pg
 
 import uuid
 from datetime import datetime, timezone, date,time
-from typing import List, Optional
+from typing import Any, List, Optional
 from decimal import Decimal
-
+from array import array
 
 
 def get_current_time() -> datetime:
@@ -26,7 +25,8 @@ class UserModel(SQLModel, table= True):
 
   username: str = Field(unique=True, index=True)
   email: str = Field(unique=True, index=True)
-  role: str = Field(index= True, default="user")
+  role: List[str] = Field(default_factory=lambda :["user"], sa_column=Column(pg.ARRAY(String)))
+
   is_active: bool = Field(default=True)
   password: str = Field(exclude=True, nullable=True)
   last_login_date: datetime = Field(sa_column=Column( DateTime(timezone=True), nullable=True ))
@@ -165,6 +165,15 @@ class EmployeeInfoModel(SQLModel, table= True):
   uid: uuid.UUID = Field(sa_column=Column(pg.UUID(as_uuid=True), primary_key=True,index=True, unique=True, default=uuid.uuid4))
   email: str = Field(unique=True)
   phone_number: str = Field(unique=True, index=True)
+  
+  address: str = Field(index=True, nullable=True)
+  date_of_birth: date = Field(sa_column=Column(Date, nullable=True))  # Corrected
+  hire_date: date = Field(sa_column=Column(Date, nullable=True))  # Corrected
+  fired_date: date = Field(sa_column=Column(Date, nullable=True))  # Corrected
+  
+  job_title: str = Field(index=True, nullable=True)
+  salary: Decimal = Field(sa_column=Column(DECIMAL(10, 2), default=0.0))
+  note: str = Field(index=True, nullable=True)
 
   employee_uid: uuid.UUID  = Field(foreign_key="employees.uid", ondelete='CASCADE')
   user_uid: Optional[uuid.UUID]  = Field( foreign_key="users.uid")

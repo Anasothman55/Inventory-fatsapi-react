@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import HTTPException, status
 
 
@@ -46,11 +47,11 @@ class InvalidPasswordError(UserError):
 
 
 class AuthorizationError(UserError):
-  def __init__(self):
+  def __init__(self, allowed_roles):
     super().__init__(
       status_code=status.HTTP_403_FORBIDDEN,
       detail={
-        "error": "Access denied"
+        "error": f"Access denied this action for roles: {"-".join(allowed_roles)}"
       }
     )
 
