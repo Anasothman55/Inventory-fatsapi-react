@@ -25,6 +25,15 @@ class BaseEmployeeSchema(BaseModel):
     str_strip_whitespace=True
   )
 
+class BaseEmployeeWithUidSchema(BaseModel):
+  name: str
+  uid: uuid.UUID
+
+  model_config = ConfigDict(
+    extra='forbid',
+    str_strip_whitespace=True
+  )
+
 
 class TimeSchema(BaseModel):
   created_at: datetime

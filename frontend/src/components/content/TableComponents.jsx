@@ -20,17 +20,6 @@ const TableComponents = ({ data, header , types}) => {
     direction: "ascending",
   });
 
-  useEffect(() => {
-    const storedSort = localStorage.getItem("sortConfig");
-    if (storedSort) {
-      setSortConfig(JSON.parse(storedSort));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("sortConfig", JSON.stringify(sortConfig));
-  }, [sortConfig]);
-
   const handleSort = (column) => {
     let direction = "ascending";
     if (sortConfig.key === column && sortConfig.direction === "ascending") {

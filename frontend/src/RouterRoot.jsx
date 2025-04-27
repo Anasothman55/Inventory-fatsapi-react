@@ -1,8 +1,9 @@
 import {createBrowserRouter} from "react-router-dom";
 import { CategoryLayout, ItemsLayout, MainLayout } from "./layout";
-import { CategoryDetails, HomePage, ItemsDetailPage, LoginPage, MainCategory, MainItemsPage } from "./pages";
+import { CategoryDetails, EmployeeInfoPage, HomePage, ItemsDetailPage, LoginPage, MainCategory, MainEmployeePage, MainItemsPage } from "./pages";
 import { InlineIcon } from "@iconify/react/dist/iconify.js";
 import { UseRedirectAuth,UseProtectedRoute } from "./store/useAuthStore";
+import EmployeeLayout from "./layout/EmployeeLayout";
 
 
 
@@ -27,6 +28,13 @@ export const  route = createBrowserRouter([
           {path: ":id", element: <ItemsDetailPage/>},
         ]
       },
+      {
+        path: "employees", element: <EmployeeLayout/>,
+        children: [
+          {index: true, element: <MainEmployeePage/>},
+          {path: ":id", element: <EmployeeInfoPage/>},
+        ]
+      }
     ]
   },
   {
@@ -48,7 +56,7 @@ export const sidebarPage = [
   {path: "/", name: "Dashboard", icon: <InlineIcon icon={"uis:graph-bar"}/>},
   {path: "/category", name: "Categories", icon: <InlineIcon icon={"material-symbols:space-dashboard"}/>},
   {path: "/items", name: "Items", icon: <InlineIcon icon={"fluent-mdl2:product-variant"}/>},
-  {path: "/employess", name: "Employees", icon: <InlineIcon icon={"fa-solid:users"}/>},
+  {path: "/employees", name: "Employees", icon: <InlineIcon icon={"fa-solid:users"}/>},
   {path: "/purchase", name: "Purchase", icon: <InlineIcon icon={"bxs:purchase-tag"}/>},
   {path: "/transaction", name: "Transactions", icon: <InlineIcon icon={"carbon:ibm-data-product-exchange"}/>},
 

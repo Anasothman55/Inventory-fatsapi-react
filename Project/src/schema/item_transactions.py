@@ -38,6 +38,9 @@ class EmployeeNameWithUid(BaseModel):
 
 class ItemName(BaseModel):
   item_name: str
+  unit : str
+  stock: int | None = None
+  uid: uuid.UUID | None = None
 
 
 

@@ -6,7 +6,7 @@ from fastapi import APIRouter, status, Depends, Path, Query, Form
 
 from ..db.models import UserModel, EmployeeModel
 from ..dependencies.auth import require_roles, get_current_user
-from ..schema.employee import BaseEmployeeSchema, EmployeeWithUseSchema2, Order, OrderBy,EmployeeWithInfoSchema, EmployeeFullSchema, EmployeeWithUseSchema
+from ..schema.employee import BaseEmployeeSchema, BaseEmployeeWithUidSchema, EmployeeWithUseSchema2, Order, OrderBy,EmployeeWithInfoSchema, EmployeeFullSchema, EmployeeWithUseSchema
 from ..schema.auth import RoleBase
 from ..utils.employee import EmployeeRepository, get_employee_repo
 from ..services.employee import (
@@ -47,7 +47,7 @@ async def get_all_employee(
   return res
 
 
-@route.post("/",response_model=BaseEmployeeSchema, status_code=status.HTTP_201_CREATED, description=alter_role_des)
+@route.post("/",response_model=BaseEmployeeWithUidSchema, status_code=status.HTTP_201_CREATED, description=alter_role_des)
 async def create_category(
     req_data: Annotated[BaseEmployeeSchema, Form()],
     current_user: Annotated[UserModel, Depends(require_roles(alter_role))],
