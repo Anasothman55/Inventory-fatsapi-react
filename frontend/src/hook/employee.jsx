@@ -1,5 +1,5 @@
 
-import { createEmployeeRes, getAllEmployeesRes, getOneEmployeeRes } from "@/routes/employee.route"
+import { createEmployeeInfoRes, createEmployeeRes, deleteEmployeeRes, getAllEmployeesRes, getOneEmployeeRes } from "@/routes/employee.route"
 import { createItemsRes,getOneItemsRes,updateItemsRes, deleteItemRes } from "@/routes/items.routes"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
@@ -43,7 +43,7 @@ export const useSetEmployee = () => {
 }
 
 
-export const useUpdateItems = (uid) => {
+export const useUpdateEmployee = (uid) => {
   
   const queryClient = useQueryClient()
 
@@ -53,22 +53,22 @@ export const useUpdateItems = (uid) => {
       return res
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['items-all',uid])
+      queryClient.invalidateQueries(['employees-all',uid])
     }
   })
 }
 
 
-export const useDeleteItems = () =>{
+export const useDeleteEmployee = () =>{
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async ({uid}) => {
-      const res = await deleteItemRes(uid)
+      const res = await deleteEmployeeRes(uid)
       return res
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['items-all']) // adjust key as needed
+      queryClient.invalidateQueries(['employees-all']) // adjust key as needed
     }
   })
 }
@@ -76,6 +76,20 @@ export const useDeleteItems = () =>{
 
 
 
+export const useSetEmployeeInfo = (id) => {
+  
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({email, phone_number, address,hire_date, job_title, date_of_birth,salary,note}) => {
+      const res = await createEmployeeInfoRes(id,email, phone_number, address,hire_date, job_title, date_of_birth,salary,note)
+      return res
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["employees", id])
+    }
+  })
+}
 
 
 

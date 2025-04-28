@@ -1,5 +1,6 @@
 
 import { CreateCategoryDailog, DeleteCategoy, ErrorComponents, TableComponents, UpdateCategory } from '@/components/content'
+import DeleteEmployeeButton from '@/components/content/dailog/employee/DeleteEmployeeButton'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -121,7 +122,7 @@ const EmployeeInfoPage = () => {
         {/* Actions */}
         <div className="flex max-md:w-full  max-md:flex-col gap-5 max-md:mt-5">
           <UpdateCategory name={data.name} uid={data.uid} />
-          <DeleteCategoy uid={data.uid} name={data.name} />
+          <DeleteEmployeeButton uid={data.uid} name={data.name} />
         </div>
       </div>
   

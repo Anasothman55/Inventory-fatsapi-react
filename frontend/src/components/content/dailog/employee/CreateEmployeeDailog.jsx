@@ -39,8 +39,8 @@ const CreateEmployeeDailog = () => {
     if(mutation.isSuccess){
       setOpen(false)
       setNamEv('')
-      toast.success("Redirect to employee page")
-      nav(`/employees/${mutation.data.data.uid}`)
+      toast.success("Redirect to employee info page")
+      nav(`/employees/employees-info/${mutation.data.data.uid}`)
       toast.success("Employee create succsessfully")
     }
 

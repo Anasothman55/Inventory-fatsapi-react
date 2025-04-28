@@ -4,29 +4,29 @@ import qs from 'qs';
 
 
 const baseUrl = "http://localhost:8000"
-const hostUrl = "http://192.168.135.191:8000"
+//const hostUrl = "http://192.168.135.191:8000"
 
 
-const itemsApi = axios.create({
+const empApi = axios.create({
   baseURL: `${baseUrl}/employees`, 
   withCredentials: true
 });
 
 
 export const getAllEmployeesRes = async ( )=>{
-  const res = await itemsApi.get(`/?order_by=created_at&order=desc`)
+  const res = await empApi.get(`/?order_by=created_at&order=desc`)
   return res.data
 }
 
 export const getOneEmployeeRes = async (id)=>{
-  const res = await itemsApi.get(`/${id}`)
+  const res = await empApi.get(`/${id}`)
   return res.data
 }
 
 
 export const createEmployeeRes = async (name)=>{
   
-  return await itemsApi.post(
+  return await empApi.post(
     "/", 
     qs.stringify({name}),
     {
@@ -39,7 +39,7 @@ export const createEmployeeRes = async (name)=>{
 
 
 export const updateItemsRes = async (uid,item_name, stock, unit, minimum_stock_level, description,category_uid)=>{
-  return await itemsApi.patch(
+  return await empApi.patch(
     `/${uid}`, 
     qs.stringify({item_name, stock, unit, minimum_stock_level, description,category_uid}),
     {
@@ -51,12 +51,26 @@ export const updateItemsRes = async (uid,item_name, stock, unit, minimum_stock_l
 }
 
 
-export const deleteItemRes = async (id)=>{
-  const res = await itemsApi.delete(`/${id}`)
+export const deleteEmployeeRes = async (id)=>{
+  const res = await empApi.delete(`/${id}`)
   return res.data
 }
 
 
+
+
+
+export const createEmployeeInfoRes = async (uid, email, phone_number, address,hire_date, job_title, date_of_birth,salary,note)=>{
+  return await empApi.post(
+    `/employee-info/${uid}`, 
+    qs.stringify({email, phone_number, address,hire_date, job_title, date_of_birth,salary,note}),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  )
+}
 
 
 

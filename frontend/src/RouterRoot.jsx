@@ -4,6 +4,8 @@ import { CategoryDetails, EmployeeInfoPage, HomePage, ItemsDetailPage, LoginPage
 import { InlineIcon } from "@iconify/react/dist/iconify.js";
 import { UseRedirectAuth,UseProtectedRoute } from "./store/useAuthStore";
 import EmployeeLayout from "./layout/EmployeeLayout";
+import path from "path";
+import EmployeeAddInfoPage from "./pages/employees/EmployeeAddInfoPage";
 
 
 
@@ -32,6 +34,7 @@ export const  route = createBrowserRouter([
         path: "employees", element: <EmployeeLayout/>,
         children: [
           {index: true, element: <MainEmployeePage/>},
+          {path: "employees-info/:id", element: <EmployeeAddInfoPage/>},
           {path: ":id", element: <EmployeeInfoPage/>},
         ]
       }
