@@ -1,11 +1,16 @@
 
 
 import CreateEmployeeInfo from '@/components/content/dailog/employee/CreateEmployeeInfo'
+import UpdateEmployeeInfoButton from '@/components/content/dailog/employee/UpdateEmployeeInfoButton'
 import { useEmployeeOneData } from '@/hook/employee'
 import React from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 const EmployeeAddInfoPage = () => {
+  const [searchPrams] = useSearchParams()
+
+  const update = searchPrams.get("update") === "true" ? true : false
+
   const { id } = useParams()
   const nav = useNavigate()
 
@@ -20,13 +25,16 @@ const EmployeeAddInfoPage = () => {
     </div>
   }
 
-  if (data?.employee_info_model) {
+  if (!update && data?.employee_info_model) {
     nav(`/employees/${id}`)
   }
 
   return (
     <div className='flex justify-center w-full pt-10 '>
-      <CreateEmployeeInfo name={data.name} uid={data.uid}/>
+      {
+        update ? <UpdateEmployeeInfoButton data={data}/>
+        : <CreateEmployeeInfo name={data.name} uid={data.uid}/>
+      }
     </div>
   )
 }

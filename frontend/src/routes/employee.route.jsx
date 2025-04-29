@@ -38,10 +38,10 @@ export const createEmployeeRes = async (name)=>{
 }
 
 
-export const updateItemsRes = async (uid,item_name, stock, unit, minimum_stock_level, description,category_uid)=>{
+export const updateEmployeeRes = async (uid,name)=>{
   return await empApi.patch(
     `/${uid}`, 
-    qs.stringify({item_name, stock, unit, minimum_stock_level, description,category_uid}),
+    qs.stringify({name}),
     {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -73,4 +73,27 @@ export const createEmployeeInfoRes = async (uid, email, phone_number, address,hi
 }
 
 
+export const updateEmployeeInfoRes = async (uid, email, phone_number, address,hire_date, job_title, date_of_birth,salary,note)=>{
+  return await empApi.patch(
+    `/employee-info/${uid}`, 
+    qs.stringify({email, phone_number, address,hire_date, job_title, date_of_birth,salary,note}),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  )
+}
 
+
+export const firedEmployeeInfoRes = async (uid, fired_date)=>{
+  return await empApi.patch(
+    `/employee-info/${uid}`, 
+    qs.stringify({fired_date}),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  )
+}

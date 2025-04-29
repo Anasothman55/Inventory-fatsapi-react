@@ -29,7 +29,12 @@ class CreateEmpInfoModel(BaseEmpInfoModel):
   salary: Decimal = Field(default=0.0,ge=0, )
   note: str | None = None
   
-
+  @field_validator('email', mode='before')
+  @classmethod
+  def empty_string_to_none(cls, v):
+      if isinstance(v, str) and not v.strip():
+          return None
+      return v
 
 class GetFullEmpInfoModel(CreateEmpInfoModel):
   uid : uuid.UUID

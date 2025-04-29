@@ -1,14 +1,16 @@
 
 import { CreateCategoryDailog, DeleteCategoy, ErrorComponents, TableComponents, UpdateCategory } from '@/components/content'
 import DeleteEmployeeButton from '@/components/content/dailog/employee/DeleteEmployeeButton'
+import FiredEmployee from '@/components/content/dailog/employee/FiredEmployee'
+import UpdateEmployeButton from '@/components/content/dailog/employee/UpdateEmployeButton'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useCategoryOneData } from '@/hook/categoryHook'
 import { useEmployeeOneData } from '@/hook/employee'
 import { InlineIcon } from '@iconify/react'
-import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const header = [
   { name: "index", placeholder: "#" },
@@ -34,10 +36,19 @@ function phoneFormat(num){
 }
 
 const EmployeeInfoPage = () => {
+  const nav = useNavigate()
   const [searchBox, setSearchBox] = useState('')
   const { id } = useParams()
 
+
   const { data, isLoading, error, isError } = useEmployeeOneData(id)
+
+  useEffect(()=>{
+    if( data?.employee_info_model === null){
+      nav(`/employees/employees-info/${id}`)
+    }
+  },[data?.employee_info_model, nav,id])
+
   if (isLoading) {
     return <div></div>
   }
@@ -46,6 +57,10 @@ const EmployeeInfoPage = () => {
     return <div className='text-red-500 text-sm flex justify-center items-center'>
       <ErrorComponents error={error} redirect={"/category"}/>
     </div>
+  }
+
+  function handleUpdateInfo() {
+    nav(`/employees/employees-info/${id}?update=true`)
   }
 
   const filteredData = data.item_transaction_model_em?.filter((item) =>
@@ -121,8 +136,10 @@ const EmployeeInfoPage = () => {
 
         {/* Actions */}
         <div className="flex max-md:w-full  max-md:flex-col gap-5 max-md:mt-5">
-          <UpdateCategory name={data.name} uid={data.uid} />
+          <UpdateEmployeButton names={data.name} uid={data.uid} />
+          <Button className="hover:bg-white  cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-yellow-500 hover:border-yellow-500 "   variant="outline" onClick={handleUpdateInfo}> <span> <InlineIcon icon={"radix-icons:update"}/></span> Update Info</Button>
           <DeleteEmployeeButton uid={data.uid} name={data.name} />
+          <FiredEmployee data={data}/>
         </div>
       </div>
   

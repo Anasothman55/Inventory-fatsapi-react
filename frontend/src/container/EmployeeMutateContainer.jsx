@@ -17,7 +17,8 @@ import { InlineIcon } from "@iconify/react"
 import React from 'react'
 
 const EmployeeMutateContainer = ({title,description,mutation, handleSubmit,name,setNamEv,btn}) => {
-  return (
+
+  return (  
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
@@ -42,7 +43,7 @@ const EmployeeMutateContainer = ({title,description,mutation, handleSubmit,name,
               value={name}
               onChange={(e) => setNamEv(e.target.value)}
               className="col-span-3"
-              placeholder="e.g. Monitors"
+              placeholder="John Doe"
             />
           </div>
         </div>

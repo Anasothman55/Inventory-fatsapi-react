@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import ConfirmPopupContainer from "@/container/ConfirmPopupContainer"
-import { useDeleteCategory } from "@/hook/categoryHook"
 import { useDeleteEmployee } from "@/hook/employee"
 import { InlineIcon } from "@iconify/react"
 import { useEffect } from "react"
@@ -14,7 +13,7 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 
-const DeleteEmployeeButton = ({name, uid}) => {
+const DeleteEmployeeButton = ({name, uid, style=""}) => {
   const nav = useNavigate()
   const deleteMutate = useDeleteEmployee()
   
@@ -36,7 +35,7 @@ const DeleteEmployeeButton = ({name, uid}) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-      <Button className="hover:bg-white cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1  ring-offset-2 hover:text-rose-700 hover:border-rose-700"  variant="outline"> <span> <InlineIcon icon={"fluent:delete-16-filled"}/></span>Delete</Button>
+      <Button className={`hover:bg-white cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1  ring-offset-2 hover:text-rose-700 hover:border-rose-700 ${style}`}  variant="outline"> <span> <InlineIcon icon={"fluent:delete-16-filled"}/></span>Delete</Button>
       </AlertDialogTrigger>
         <ConfirmPopupContainer 
           title="Are you absolutely sure?"

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, TIMESTAMP, DateTime,Date,ARRAY, String
-from sqlmodel import  SQLModel,Field, Relationship,DECIMAL, Date
+from sqlmodel import  SQLModel,Field, Relationship,DECIMAL, Date, ForeignKey
 from sqlalchemy.sql import func
 import sqlalchemy.dialects.postgresql as pg
 
@@ -149,7 +149,11 @@ class EmployeeModel(SQLModel, table = True):
 
   user_uid: Optional[uuid.UUID]  = Field( foreign_key="users.uid")
 
-  employee_info_model: Optional["EmployeeInfoModel"] = Relationship(back_populates="employee_model", sa_relationship_kwargs={"lazy": "selectin"})
+  employee_info_model: Optional["EmployeeInfoModel"] = Relationship(back_populates="employee_model", sa_relationship_kwargs={
+    "lazy": "selectin",
+    "cascade": "all, delete-orphan",
+    "uselist": False
+  })
   item_transaction_model_em : List["ItemTransactions"] = Relationship(back_populates="employee_model", sa_relationship_kwargs={"lazy": "selectin"})
 
   created_at: datetime = Field(default_factory=get_current_time,sa_column=Column(TIMESTAMP(timezone=True)))
@@ -163,8 +167,8 @@ class EmployeeInfoModel(SQLModel, table= True):
   __tablename__ = "employee_info"
 
   uid: uuid.UUID = Field(sa_column=Column(pg.UUID(as_uuid=True), primary_key=True,index=True, unique=True, default=uuid.uuid4))
-  email: str = Field(unique=True)
-  phone_number: str = Field(unique=True, index=True)
+  email: Optional[str] = Field(unique=True, nullable=True)
+  phone_number: Optional[str] = Field(unique=True, nullable=True, index=True)
   
   address: str = Field(index=True, nullable=True)
   date_of_birth: date = Field(sa_column=Column(Date, nullable=True))  # Corrected
@@ -175,7 +179,13 @@ class EmployeeInfoModel(SQLModel, table= True):
   salary: Decimal = Field(sa_column=Column(DECIMAL(10, 2), default=0.0))
   note: str = Field(index=True, nullable=True)
 
-  employee_uid: uuid.UUID  = Field(foreign_key="employees.uid", ondelete='CASCADE')
+  employee_uid: uuid.UUID = Field(
+    sa_column=Column(
+      pg.UUID(as_uuid=True),
+      ForeignKey("employees.uid", ondelete="CASCADE"),
+      nullable=False
+    )
+  )
   user_uid: Optional[uuid.UUID]  = Field( foreign_key="users.uid")
 
   employee_model: Optional[EmployeeModel] = Relationship(back_populates="employee_info_model", sa_relationship_kwargs={"lazy": "selectin"})

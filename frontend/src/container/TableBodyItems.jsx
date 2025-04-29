@@ -10,8 +10,18 @@ import {
   TableRow, } from '@/components/ui/table';
 import { useNavigate } from 'react-router-dom';
 
-const TableBodyItems = ({sortedData,types}) => {
 
+function phoneFormat(num){
+
+  const part1 = num.slice(0, 4);    // first 4 letters
+  const part2 = num.slice(4, 7);    // next 3 letters
+  const part3 = num.slice(7, 11);   // last 4 letters
+  
+  const result = `${part1}-${part2}-${part3}`;
+  return result;
+}
+
+const TableBodyItems = ({sortedData,types}) => {
   const nav = useNavigate()
 
   const handleRowClick = (id) => {
@@ -43,10 +53,9 @@ const TableBodyItems = ({sortedData,types}) => {
 
   return (
     <TableBody>
-      {sortedData.map((c, index) => {
-
-        if(types === 'categoryItems'){
-          return (
+      {
+        types === 'categoryItems' ? (
+          sortedData.map((c,index)=>(
             <TableRow onClick={()=>handleItemRowClick (c.uid)} key={index} className="hover:bg-gray-50 transition-colors">
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.item_name}</TableCell>
@@ -54,11 +63,10 @@ const TableBodyItems = ({sortedData,types}) => {
               <TableCell className="px-4 py-2 text-gray-700">{c.stock}</TableCell>
               <TableCell className="px-4 py-2 text-gray-600">{c.minimum_stock_level}</TableCell>
             </TableRow>
-          );
-        }
-
-        if(types === 'category'){
-          return (
+          ))
+        )
+        : types === 'category' ? (
+          sortedData.map((c,index)=>(
             <TableRow onClick={()=> handleRowClick(c.uid)} key={index} className="hover:bg-gray-50 transition-colors">
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.name}</TableCell>
@@ -66,11 +74,10 @@ const TableBodyItems = ({sortedData,types}) => {
               <TableCell className="px-4 py-2 text-gray-600">{formatDate(c.created_at)}</TableCell>
               <TableCell className="px-4 py-2 text-gray-600">{formatDate(c.updated_at)}</TableCell>
             </TableRow>
-          );
-        }
-
-        if(types==="items"){
-          return (
+          ))
+        )
+        : types==="items" ?(
+          sortedData.map((c,index)=>(
             <TableRow onClick={()=> handleItemRowClick(c.uid)} key={index} className="hover:bg-gray-50 transition-colors">
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.item_name}</TableCell>
@@ -81,11 +88,10 @@ const TableBodyItems = ({sortedData,types}) => {
               <TableCell className="px-4 py-2 text-gray-600">{formatDate(c.created_at)}</TableCell>
               <TableCell className="px-4 py-2 text-gray-600">{formatDate(c.updated_at)}</TableCell>
             </TableRow>
-          );
-        }
-
-        if(types === "itemsTransactions"){
-          return (
+          ))
+        )
+        : types === "itemsTransactions" ? (
+          sortedData.map((c,index)=>(
             <TableRow onClick={()=> handleTransactionsRowClick(c.employee_model.uid)} key={index} className="hover:bg-gray-50 transition-colors">
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.employee_model.name}</TableCell>
@@ -94,36 +100,33 @@ const TableBodyItems = ({sortedData,types}) => {
               <TableCell className="px-4 py-2 text-gray-600">{c.transaction_date}</TableCell>
               <TableCell className="px-4 py-2 text-gray-600">{formatTime(c.transaction_time)}</TableCell>
             </TableRow>
-          );
-        }
-
-        if(types === "itemsPurchase"){
-          return (
+          ))
+        )
+        : types === "itemsPurchase" ? (
+          sortedData.map((c,index)=>(
             <TableRow onClick={()=> handlePurchaseRowClick(c.purchas_uid)} key={index} className="hover:bg-gray-50 transition-colors">
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.quantity}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.unite_price}</TableCell>
               <TableCell className="px-4 py-2 text-gray-600">{c.subtotal_price}</TableCell>
             </TableRow>
-          );
-        }
-
-        if(types === "employee"){
-          return (
-            <TableRow onClick={()=> handleTransactionsRowClick(c.uid)} key={index} className="hover:bg-gray-50 transition-colors">
+          ))
+        )
+        : types === "employee" ? (
+          sortedData.map((c,index)=>(
+            <TableRow onClick={()=> handleTransactionsRowClick(c.uid)} key={index} className={`transition-colors ${c?.employee_info_model?.fired_date ? 'bg-red-300 text-white hover:bg-red-600' : 'bg-gray-50 hover:bg-gray-100'}`}>
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
-              <TableCell className="px-4 py-2 text-gray-700">{c.name}</TableCell>
-              <TableCell className="px-4 py-2 text-gray-700">{c.employee_info_model?.phone_number}</TableCell>
-              <TableCell className="px-4 py-2 text-gray-600">{c.employee_info_model?.job_title}</TableCell>
-              <TableCell className="px-4 py-2 text-gray-600">{c.employee_info_model?.address}</TableCell>
-              <TableCell className="px-4 py-2 text-gray-600">{c.employee_info_model?.hire_date}</TableCell>
+              <TableCell className="px-4 py-2 ">{c.name}</TableCell>
+              <TableCell className="px-4 py-2 ">{c.employee_info_model?.phone_number}</TableCell>
+              <TableCell className="px-4 py-2">{c.employee_info_model?.job_title}</TableCell>
+              <TableCell className="px-4 py-2">{c.employee_info_model?.address}</TableCell>
+              <TableCell className="px-4 py-2 ">{c.employee_info_model?.hire_date}</TableCell>
             </TableRow>
-          );
-        }
-
-        if(types === "employeeTransactions"){
-          return (
-            <TableRow onClick={()=> handleItemRowClick(c.items_model.uid)} key={index} className="hover:bg-gray-50 transition-colors">
+          ))
+        ) 
+        : types === "employeeTransactions" ? (
+          sortedData.map((c, index) =>(
+            <TableRow onClick={()=> handleItemRowClick(c.items_model.uid)} key={index} className={`hover:bg-gray-50 transition-colors `}>
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.items_model.item_name}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.items_model.unit}</TableCell>
@@ -134,9 +137,11 @@ const TableBodyItems = ({sortedData,types}) => {
               <TableCell className="px-4 py-2 text-gray-600">{formatTime(c.transaction_time)}</TableCell>
               <TableCell className="px-4 py-2 text-gray-600">{c.note}</TableCell>
             </TableRow>
-          );
-        }
-      })}
+          ))
+        )
+        : "null"
+      }
+
     </TableBody>
   )
 }
