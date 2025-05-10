@@ -28,7 +28,9 @@ export const checkAuthRes = async ()=>{
   return await authApi.get('/check-auth')
 }
 
-
+export const logoutRes = async ()=>{
+  return await authApi.post('/logout')
+}
 
 
 

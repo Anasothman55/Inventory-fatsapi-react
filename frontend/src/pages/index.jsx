@@ -6,6 +6,8 @@ import HomePage from "./HomePage";
 import ItemsDetailPage from "./items/ItemsDetailPage";
 import MainItemsPage from "./items/MainItemsPage";
 import LoginPage from "./LoginPage";
+import MainPurchasePage from "./purchase/MainPurchasePage";
+import PurchaseDetailPage from "./purchase/PurchaseDetailPage";
 
 
 
@@ -19,7 +21,9 @@ export {
   LoginPage,
   MainEmployeePage,
   EmployeeInfoPage,
-  
+  MainPurchasePage,
+  PurchaseDetailPage,
+
 }
 
 

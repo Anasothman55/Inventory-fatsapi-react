@@ -139,6 +139,32 @@ const TableBodyItems = ({sortedData,types}) => {
             </TableRow>
           ))
         )
+        : types === "purchases" ?(
+          sortedData.map((c, index) =>(
+            <TableRow onClick={()=> handlePurchaseRowClick(c.uid)} key={index} className={`hover:bg-gray-50 transition-colors `}>
+              <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-700">{c.purchasing_plase}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.receipt_number}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.purchaser}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-700">{c.curuncy_type}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.total_price}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.recipient}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.purchase_date}</TableCell>
+            </TableRow>
+          ))
+        )
+        : types === "purchaseItems" ?(
+          sortedData.map((c, index) =>(
+            <TableRow onClick={()=> handleItemRowClick(c.items_model.uid)} key={index} className={`hover:bg-gray-50 transition-colors `}>
+              <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-700">{c.items_model.item_name}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.quantity}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.items_model.stock}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-700">{c.unite_price}</TableCell>
+              <TableCell className="px-4 py-2 text-gray-600">{c.subtotal_price}</TableCell>
+            </TableRow>
+          ))
+        )
         : "null"
       }
 

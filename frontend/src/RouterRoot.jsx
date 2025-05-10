@@ -1,11 +1,13 @@
 import {createBrowserRouter} from "react-router-dom";
-import { CategoryLayout, ItemsLayout, MainLayout } from "./layout";
-import { CategoryDetails, EmployeeInfoPage, HomePage, ItemsDetailPage, LoginPage, MainCategory, MainEmployeePage, MainItemsPage } from "./pages";
+import { CategoryLayout, ItemsLayout, MainLayout, PurchaseDetailPage } from "./layout";
+import { CategoryDetails, EmployeeInfoPage, HomePage, ItemsDetailPage, LoginPage, MainCategory, MainEmployeePage, MainItemsPage, MainPurchasePage } from "./pages";
 import { InlineIcon } from "@iconify/react/dist/iconify.js";
 import { UseRedirectAuth,UseProtectedRoute } from "./store/useAuthStore";
 import EmployeeLayout from "./layout/EmployeeLayout";
 import path from "path";
 import EmployeeAddInfoPage from "./pages/employees/EmployeeAddInfoPage";
+import PurchaseLayout from "./layout/PurchaseLayout";
+import MainTransactionPage from "./pages/transactions/MainTransactionPage";
 
 
 
@@ -37,6 +39,16 @@ export const  route = createBrowserRouter([
           {path: "employees-info/:id", element: <EmployeeAddInfoPage/>},
           {path: ":id", element: <EmployeeInfoPage/>},
         ]
+      },
+      {
+        path: "purchase", element: <PurchaseLayout/>,
+        children: [
+          {index: true, element: <MainPurchasePage/>},
+          {path: ":id", element: <PurchaseDetailPage/>},
+        ]
+      },
+      {
+        path: "transaction", element:< MainTransactionPage/>,
       }
     ]
   },

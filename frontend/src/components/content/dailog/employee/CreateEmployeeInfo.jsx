@@ -59,7 +59,9 @@ const CreateEmployeeInfo = ({uid,name}) => {
       setNote("")
 
       toast.success(`Added info to ${name} succsessfully`)
-      nav(`/employees/${uid}`)
+      setTimeout(()=>{
+        nav(`/employees/${uid}`)
+      }, 1000)
     }
 
   },[mutation.isSuccess,])

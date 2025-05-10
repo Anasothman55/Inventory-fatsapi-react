@@ -3,21 +3,25 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Menu } from "lucide-react" // Optional: for hamburger icon
-import { NavLink } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
+import LogoutButton from "./LogoutButton"
 
 const MobileSidebar = ({sidebarPage}) => {
   return (
     <Sheet>
+      
       <SheetTrigger asChild>
         <Button  variant="ghost"  size="icon" className="lg:hidden ">
           <Menu className="w-6 h-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-64 p-0">
+      <SheetContent side="left" className="w-64 p-3 justify-between">
         {/* You can replace this with your real sidebar component */}
-        <div className="p-3">
+        <div >
           <div className="mb-10">
-            <h1 className="text-2xl text-emerald-700 font-bold ">Kolak Inv</h1>
+            <h1 className="text-2xl text-emerald-700 font-bold ">
+              <Link to="/">Kolak Inv</Link>
+            </h1>
           </div>
 
           <ul className="flex flex-col gap-5">
@@ -29,7 +33,9 @@ const MobileSidebar = ({sidebarPage}) => {
               ) )
             }
           </ul>
+        
         </div>
+        <LogoutButton/>
       </SheetContent>
     </Sheet>
   )

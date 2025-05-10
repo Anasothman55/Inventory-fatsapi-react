@@ -8,7 +8,6 @@ import { toast } from 'sonner'
 const ErrorComponents = ({ error , redirect, act= true}) => {
 
   const nav = useNavigate();
-
   useEffect(() => {
     if (error.status === 404 && redirect) {
       toast.error(error.response?.data?.detail?.error || 'Not Found');
@@ -22,7 +21,15 @@ const ErrorComponents = ({ error , redirect, act= true}) => {
         toast.error(error.response?.data?.detail?.error || 'An error occurred');
       }
 
+    if (error.code === "ERR_NETWORK"){
+      toast.error(error.message);
+    }
+
   }, [error, redirect, nav]);
+
+  if (error.code === "ERR_NETWORK"){
+    return null
+  }
   
   if (error.status === 422) {
     if(act=== false){

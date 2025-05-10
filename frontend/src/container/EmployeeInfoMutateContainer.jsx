@@ -77,7 +77,7 @@ const EmployeeInfoMutateContainer = ({handleSubmit,handleCancel,mutation, btn,na
             </div>
             <div className="flex flex-col space-y-1.5 w-full max-w-full overflow-hidden">
               <Label htmlFor="note">Note</Label>
-              <Textarea   wrap="soft" id="note" value={props.note} onChange={e=> props.setNote(e.target.value)}/>
+              <Textarea  wrap="soft" id="note" value={props.note} onChange={e=> props.setNote(e.target.value)}/>
             </div>
             
           </div>

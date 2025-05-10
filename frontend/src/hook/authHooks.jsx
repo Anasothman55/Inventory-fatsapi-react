@@ -1,10 +1,26 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useAuthStore } from "../store/useAuthStore"
-import { checkAuthRes, loginRes } from "../routes/auth.routes"
+import { checkAuthRes, loginRes, logoutRes } from "../routes/auth.routes"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 
 
+
+export const useLogout = () => {
+  
+  const logout = useAuthStore(s=> s.logout)
+
+  return useMutation({
+    mutationFn: async () => {
+      await logoutRes()
+    },
+    onSuccess: () => {
+      toast.success("Logout Successfully")
+      logout()
+    }
+  })
+}
 
 export const useLogin = () => {
   

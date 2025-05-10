@@ -51,9 +51,9 @@ const ItemMutateContainer = ({title,des,mutation,handleSubmit,btn, ...props}) =>
             <Label htmlFor="category" className="text-right">Category</Label>
             <ChoseCategoryCombo value={props.category_uid} onChange={props.setCategoryUid} />
           </div>
-          <div className="flex flex-col gap-2 justify-start">
+          <div className="flex flex-col gap-2 justify-start overflow-x-hidden">
             <Label htmlFor="description" className="text-right">Description</Label>
-            <Textarea id="description" value={props.description} onChange={(e) => props.setDescription(e.target.value)} placeholder="Type your message here." />
+            <Textarea  wrap="soft" id="description" value={props.description} onChange={(e) => props.setDescription(e.target.value)} placeholder="Type your message here." />
           </div>
         </div>
 

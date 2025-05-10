@@ -40,6 +40,7 @@ class UpdatePurchaseItemsSchema(BaseModel):
 class ItemsModelPT(BaseModel):
   item_name: str
   stock: int
+  uid: uuid.UUID 
 
 class GetFullPurchaseItemsSchema(BasePurchaseItemSchema):
   uid: uuid.UUID | None = None
