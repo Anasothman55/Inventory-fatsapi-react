@@ -42,17 +42,24 @@ class ItemsModelPT(BaseModel):
   stock: int
   uid: uuid.UUID 
 
+
+class PurchasesModelPT(BaseModel):
+  uid: uuid.UUID | None = None
+  purchasing_plase : str | None = None
+  receipt_number : int | None = None
+
 class GetFullPurchaseItemsSchema(BasePurchaseItemSchema):
   uid: uuid.UUID | None = None
   created_at: datetime
   updated_at: datetime
+  purchas_uid : uuid.UUID | None = None
   items_model: ItemsModelPT | None = None
-
+  
 class GetAllPurchaseItemsSchema(GetFullPurchaseItemsSchema):
   user_uid : uuid.UUID  | None = None
   item_uid : uuid.UUID | None = None
   purchas_uid : uuid.UUID | None = None
-
+  purchas_model: PurchasesModelPT | None = None
 
 class Order(enum.Enum):
   DESC  = "desc"

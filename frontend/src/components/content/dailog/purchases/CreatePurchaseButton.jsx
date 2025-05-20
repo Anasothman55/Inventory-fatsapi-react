@@ -2,20 +2,10 @@
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { ChoseCategoryCombo, ItemMutateContainer } from "@/container"
 import PurchaseMutateContainer from "@/container/PurchaseMutateContainer"
 
-import { useSetItems } from "@/hook/itemsHook"
 import { useSetPurchase } from "@/hook/purchaseHook"
 import { InlineIcon } from "@iconify/react"
 import { useEffect, useState } from "react"

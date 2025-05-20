@@ -8,6 +8,8 @@ import path from "path";
 import EmployeeAddInfoPage from "./pages/employees/EmployeeAddInfoPage";
 import PurchaseLayout from "./layout/PurchaseLayout";
 import MainTransactionPage from "./pages/transactions/MainTransactionPage";
+import PurchaseAddDetailPage from "@/pages/purchase/PurchaseAddDetailPage.jsx";
+import PurchaseItemDetailPage from "./pages/purchase/PurchaseItemDetailPage";
 
 
 
@@ -45,6 +47,8 @@ export const  route = createBrowserRouter([
         children: [
           {index: true, element: <MainPurchasePage/>},
           {path: ":id", element: <PurchaseDetailPage/>},
+          {path: ":id/purchase-info", element: <PurchaseAddDetailPage/>},
+          {path: ":id/purchase-info/:pi_id", element: <PurchaseItemDetailPage/>},
         ]
       },
       {

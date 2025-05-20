@@ -1,5 +1,7 @@
 
 
+
+
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -17,18 +19,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useCategoryData } from "@/hook/categoryHook"
 import { ErrorComponents } from "@/components/content"
 import { useState } from "react"
+import { useItemsBasicData } from "@/hook/itemsHook"
 
 
-
-const ChoseCategoryCombo = ({ value, onChange }) => {
+const ChoseItemCombo = ({ value, onChange }) => {
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState("")
 
-
-  const {data, isLoading, isError,error } = useCategoryData()
+  const {data, isLoading, isError,error } = useItemsBasicData()
   
   if (isError) {
     return <div className='text-red-500 text-sm flex justify-center items-center'>{
@@ -36,8 +36,8 @@ const ChoseCategoryCombo = ({ value, onChange }) => {
     }</div>
   }
   
-  const filteredData = data?.filter(category =>
-    category.name.includes(search)
+  const filteredData = data?.filter(item =>
+    item.item_name.includes(search)
   )
 
   return (
@@ -48,31 +48,31 @@ const ChoseCategoryCombo = ({ value, onChange }) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className=" justify-between"
+          className="justify-between"
         >
           {value
-            ? data?.find((category) => category.uid === value)?.name
-            : "Select category..."}
+            ? data?.find((item) => item.uid === value)?.item_name
+            : "Select item..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="max-w-[350px] p-0">
         <Command>
-          <CommandInput onValueChange={setSearch} placeholder="Search Categories..."  className="h-9" />
+          <CommandInput onValueChange={setSearch} placeholder="Search Items..."  className="h-9" />
           
           <CommandList>
             <CommandEmpty>No Category found.</CommandEmpty>
             <CommandGroup>
-              {filteredData?.map((category) => (
+              {filteredData?.map((item) => (
                 <CommandItem
-                key={category.uid}
+                key={item.uid}
                 onSelect={() => {
-                  onChange(category.uid === value ? "" : category.uid)
+                  onChange(item.uid === value ? "" : item.uid)
                   setOpen(false)
                 }}
               >
-                {category.name}
-                <Check className={cn( "ml-auto",value === category.uid ? "opacity-100" : "opacity-0")}/>
+                {item.item_name}
+                <Check className={cn( "ml-auto",value === item.uid ? "opacity-100" : "opacity-0")}/>
               </CommandItem>
               ))}
             </CommandGroup>
@@ -83,6 +83,4 @@ const ChoseCategoryCombo = ({ value, onChange }) => {
   )
 }
 
-export default ChoseCategoryCombo
-
-
+export default ChoseItemCombo

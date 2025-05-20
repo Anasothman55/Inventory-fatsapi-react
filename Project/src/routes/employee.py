@@ -31,13 +31,23 @@ from .employeeInfo import route as emp_info_route
 route = APIRouter(
   dependencies=[Depends(get_current_user)],
   tags=["Employees"],
-  
 )
 
 route.include_router(emp_info_route, prefix="/employee-info")
 
 @route.get('/', response_model= List[EmployeeWithUseSchema], status_code= status.HTTP_200_OK)
 async def get_all_employee(
+    current_user: Annotated[UserModel, Depends(require_roles(see_role))],
+    repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
+    order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
+    order: Annotated[Order, Query()] = Order.ASC,
+):
+  f"""this route can use by all users"""
+  res = await repo.get_all(order,order_by)
+  return res
+
+@route.get('/name', response_model= List[BaseEmployeeWithUidSchema], status_code= status.HTTP_200_OK)
+async def get_all_employee_name(
     repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
     order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
     order: Annotated[Order, Query()] = Order.ASC,
@@ -59,6 +69,7 @@ async def create_category(
 
 @route.get('/{uid}',  status_code= status.HTTP_200_OK, response_model=EmployeeWithUseSchema2)
 async def get_one_categories(
+    current_user: Annotated[UserModel, Depends(require_roles(see_role))],
     repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
     uid: Annotated[uuid.UUID, Path(...)]
 ):

@@ -28,10 +28,10 @@ from ..services.purchase import (
 )
 
 
-alter_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT]
+alter_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.STOCK_KIPPER]
 see_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER]
 
-alter_role_des = f"""this route can use by all {RoleBase.ADMIN} and { RoleBase.ACCOUNTANT} users"""
+alter_role_des = f"""this route can use by all {RoleBase.ADMIN} and { RoleBase.ACCOUNTANT} and {RoleBase.STOCK_KIPPER} users"""
 see_role_des = f"""this route can use by all {RoleBase.ADMIN} and {RoleBase.ACCOUNTANT} and {RoleBase.MANAGER} users"""
 admin_des = f"""this route can use by all {RoleBase.ADMIN} users"""
 
@@ -68,7 +68,7 @@ async def get_one_purchase(
 ):
   res = await get_one_purchase_services(repo,uid)
   return res
-
+  
 @route.patch("/{uid}",description=alter_role_des, status_code=status.HTTP_200_OK, response_model=BasePurchaseSchema)
 async def update_purchase(
     current_user: Annotated[UserModel, Depends(require_roles(alter_role))],

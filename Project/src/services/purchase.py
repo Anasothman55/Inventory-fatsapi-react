@@ -13,6 +13,7 @@ from rich import print
 from src.utils.items import ItemsRepository
 from src.utils.purchase_items import PurchasesItemsRepository
 
+from ..core.config import setting
 from ..db.models import  PurchaseModel
 from ..utils.purchase import PurchasesRepository, check_purchase_unique
 from ..schema.purchase import CreatePurchaseSchema, UpdatePurchaseSchema
@@ -62,8 +63,12 @@ async def delete_purchase_services(
 
   purchase = await get_one_purchase_services(repo,uid)
   pi = await item_purchase_repo.get_by_purchase_uid(purchase.uid)
-  for i in pi:
+  
+  if pi:
+    pi_uid = [i.uid for i in pi]
     async with httpx.AsyncClient(cookies=cookies) as client:
-      await client.delete(f'http://127.0.0.1:8000/purchase-items/{i.uid}')
+      await asyncio.gather(*[
+        client.delete(f'http://{setting.HOST}:8000/purchase-items/{i}') for i in pi_uid
+      ], return_exceptions=True)
   await repo.delete_row(purchase)
   return None

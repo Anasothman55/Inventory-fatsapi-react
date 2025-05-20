@@ -7,7 +7,8 @@ import { useCategoryOneData } from '@/hook/categoryHook'
 import { usePurchaseOneData } from '@/hook/purchaseHook'
 import { InlineIcon } from '@iconify/react'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
+import UpdatePurchaseButton from "@/components/content/dailog/purchases/UpdatePurchaseButton.jsx";
 
 const header = [
   { name: "index", placeholder: "#" },
@@ -18,13 +19,13 @@ const header = [
   { name: "subtotal_price", placeholder: "Subtotal Price" },
 ]
 
-
 const PurchaseDetailPage = () => {
   const [searchBox, setSearchBox] = useState('')
   const { id } = useParams()
+  const nav = useNavigate()
 
   const { data, isLoading, error, isError } = usePurchaseOneData(id)
-  console.log(data)
+  
   if (isLoading) {
     return <div></div>
   }
@@ -38,6 +39,10 @@ const PurchaseDetailPage = () => {
   const filteredData = data.purchas_items_model.filter((item) =>
     item.items_model.item_name.toLowerCase().includes(searchBox.toLowerCase())
   );
+
+  const handleAddDetail = ()=>{
+    nav(`/purchase/${id}/purchase-info`)
+  }
 
   return (
     <div className='h-full flex flex-col '>
@@ -87,8 +92,9 @@ const PurchaseDetailPage = () => {
 
         {/* Actions */}
         <div className="flex max-md:w-full  max-md:flex-col gap-5 max-md:mt-5">
-          <UpdateCategory name={data.name} uid={data.uid} />
-          <DeletePurchaseButton uid={data.uid} name={data.purchasing_plase} />
+          <UpdatePurchaseButton data={data} />
+          <Button onClick={handleAddDetail} className="cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-emerald-700 hover:border-emerald-700 hover:bg-white"  variant="outline"> <span> <InlineIcon icon={"gala:add"}/></span> Add Details</Button>
+          <DeletePurchaseButton uid={id} name={data.purchasing_plase} />
         </div>
       </div>
   
@@ -98,7 +104,7 @@ const PurchaseDetailPage = () => {
           <div className="mt-10 max-md:mt-5 flex flex-col gap-5 flex-grow min-h-40">
             {/* Search */}
             <div className='flex justify-end max-md:flex-col gap-5'>
-    
+
               <Input value={searchBox} onChange={(e) => setSearchBox(e.target.value)}  className="w-80 py-5 border border-gray-300 focus:ring-1 focus:ring-gray-300 ring-offset-2 transition-all duration-300 ease-in max-md:w-full "
                 type="text"
                 placeholder="Search"
@@ -107,7 +113,7 @@ const PurchaseDetailPage = () => {
       
             {/* Scrollable table area */}
             <div className="flex-grow min-h-[90vh] pb-4">
-    
+
               <ScrollArea className="h-full w-full rounded-sm shadow-sm overflow-auto">
                 <div className="w-full overflow-x-auto">
                   <div className="min-w-[800px]">

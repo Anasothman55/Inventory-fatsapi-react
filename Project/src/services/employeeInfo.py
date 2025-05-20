@@ -10,6 +10,7 @@ from src.db.models import EmployeeInfoModel, EmployeeModel
 from src.exceptions.employee import EmployeeInfoIntigrity, EmployeeNotFound, EmployeeInfoDontExist
 from src.schema.employee import EmployeeWithUseSchema
 
+from ..core.config import setting
 from ..utils.employeeInfo import EmployeeInfoRepository
 from ..schema.employeeInfo import CreateEmpInfoModel, GetFullEmpInfoModel, UpdateEmpInfoModel
 
@@ -23,7 +24,7 @@ from sqlalchemy.exc import IntegrityError
 
 async def check_employee_exists(uid: uuid.UUID, cookies: Dict)-> Dict:
   async with httpx.AsyncClient(cookies=cookies) as client:
-    res = await client.get(f'http://127.0.0.1:8000/employees/{uid}')
+    res = await client.get(f'http://{setting.HOST}/employees/{uid}')
     if (res.status_code == 404):
       raise EmployeeNotFound(uid)
     return res.json()

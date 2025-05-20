@@ -1,4 +1,4 @@
-import { getAllItemsRes,createItemsRes,getOneItemsRes,updateItemsRes, deleteItemRes } from "@/routes/items.routes"
+import { getAllItemsRes,createItemsRes,getOneItemsRes,updateItemsRes, deleteItemRes, getBasicItemsRes } from "@/routes/items.routes"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 
@@ -8,6 +8,16 @@ export const useItemsData = () =>(
   useQuery({
     queryKey: ["items-all"],
     queryFn: () => getAllItemsRes(),
+    staleTime: 10000,
+    retry: false,
+  })
+)
+
+
+export const useItemsBasicData = () =>(
+  useQuery({
+    queryKey: ["items-basic"],
+    queryFn: () => getBasicItemsRes(),
     staleTime: 10000,
     retry: false,
   })

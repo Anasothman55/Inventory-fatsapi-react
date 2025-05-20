@@ -69,7 +69,7 @@ const EmployeeInfoPage = () => {
 
   return (
     <div className='h-full flex flex-col '>
-      <h3 className="text-[14px]">Category / {data.name}</h3>
+      <h3 className="text-[14px]">Employees / {data.name}</h3>
       <h1 className="font-bold text-[32px] mt-5 mb-5">{data.name}</h1>
       <p>Note: {data?.employee_info_model?.note}</p>
   

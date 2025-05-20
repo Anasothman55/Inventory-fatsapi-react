@@ -36,7 +36,9 @@ const TableBodyItems = ({sortedData,types}) => {
   const handlePurchaseRowClick = (id) => {
     nav(`/purchase/${id}`);
   };
-
+  const handlePurchaseItemRowClick = (id,pi_id) => {
+    nav(`/purchase/${id}/purchase-info/${pi_id}`);
+  };
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     const day = date.getDate();
@@ -155,7 +157,8 @@ const TableBodyItems = ({sortedData,types}) => {
         )
         : types === "purchaseItems" ?(
           sortedData.map((c, index) =>(
-            <TableRow onClick={()=> handleItemRowClick(c.items_model.uid)} key={index} className={`hover:bg-gray-50 transition-colors `}>
+            
+            <TableRow onClick={()=> handlePurchaseItemRowClick(c.purchas_uid,c.uid)} key={index} className={`hover:bg-gray-50 transition-colors `}>
               <TableCell className="px-4 py-2 ">{index + 1}</TableCell>
               <TableCell className="px-4 py-2 text-gray-700">{c.items_model.item_name}</TableCell>
               <TableCell className="px-4 py-2 text-gray-600">{c.quantity}</TableCell>

@@ -65,7 +65,7 @@ class ItemsRepository:
 
   async def update_row(self, req_data:dict, row_model: ItemsModel) -> ItemsModel:
     for key, value in req_data.items():
-      if value:
+      if value or value == 0:
         setattr(row_model,key,value)
     return await self._commit_refresh(row_model)
 

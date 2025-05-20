@@ -18,6 +18,11 @@ export const getAllItemsRes = async ( )=>{
   return res.data
 }
 
+export const getBasicItemsRes = async ( )=>{
+  const res = await itemsApi.get(`/basic`)
+  return res.data
+}
+
 export const getOneItemsRes = async (id)=>{
   const res = await itemsApi.get(`/${id}`)
   return res.data
