@@ -40,7 +40,7 @@ alter_role = [RoleBase.ADMIN, RoleBase.STOCK_KIPPER]
 alter_role_des = f"""this route can use by all {RoleBase.ADMIN} and {RoleBase.STOCK_KIPPER} users"""
 admin_des = f"""this route can use by all {RoleBase.ADMIN} users"""
 
-
+  
 @route.get('/basic', status_code= status.HTTP_200_OK, response_model=List[ItemsBasicSchema])
 async def get_all_items(repo: Annotated[ItemsRepository, Depends(get_items_repo)]):
   order = Order.ASC

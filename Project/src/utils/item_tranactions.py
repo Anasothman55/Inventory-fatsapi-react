@@ -4,12 +4,12 @@ from sqlalchemy import Select
 from .items import ItemsRepository
 from ..db.index import get_db
 from ..db.models import ItemsModel, ItemTransactions
-from ..schema.item_transactions import Order, OrderBy, GetBySchema, ActionType
+from ..schema.item_transactions import Order, OrderBy, GetByDateSchema, ActionType
 from ..exceptions.item_transactions import TransactionsStock
 
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select , desc, asc
+from sqlmodel import between, select , desc, asc
 
 from datetime import date, time
 from typing import Any, Annotated, Callable
@@ -52,7 +52,7 @@ class ItemTransactionsRepository:
   async def get_by_transaction_time(self, transaction_time: time):
     return await self._statement(field="transaction_time", value= transaction_time)
 
-  async def get_all(self, order: Order, order_by: OrderBy,filters: GetBySchema):
+  async def get_all(self, order: Order, order_by: OrderBy,filters: GetByDateSchema):
     order_column = getattr(self.model, order_by.value )
 
     if order.value == "desc": order_column = desc(order_column)
@@ -61,10 +61,14 @@ class ItemTransactionsRepository:
     statement: Select = select(self.model)
 
     # Dynamically apply filters
-    for field_name, value in filters.model_dump(exclude_none=True).items():
-      if hasattr(self.model, field_name):
-        statement = statement.where(getattr(self.model, field_name) == value)
-
+    #for field_name, value in filters.model_dump(exclude_none=True).items():
+    #  if hasattr(self.model, field_name):
+    #    statement = statement.where(getattr(self.model, field_name) == value)
+    
+    statement = statement.where(
+      self.model.transaction_date.between(filters.start or date(1900,1,1), filters.end or date.today())
+    )
+    
     # Apply ordering
     statement = statement.order_by(order_column)
 

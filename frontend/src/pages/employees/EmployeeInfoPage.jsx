@@ -6,7 +6,6 @@ import UpdateEmployeButton from '@/components/content/dailog/employee/UpdateEmpl
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { useCategoryOneData } from '@/hook/categoryHook'
 import { useEmployeeOneData } from '@/hook/employee'
 import { InlineIcon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'

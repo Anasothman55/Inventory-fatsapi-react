@@ -4,7 +4,8 @@ from typing import List
 from datetime import datetime,date
 from decimal import Decimal
 
-from pydantic import  BaseModel,ConfigDict, Field
+
+from pydantic import  BaseModel,ConfigDict, Field,field_validator,ValidationError
 
 from .purchase_items import  BasePurchaseItemSchema, GetFullPurchaseItemsSchema
 
@@ -64,6 +65,13 @@ class CreatePurchaseSchema(BaseModel):
     extra='forbid',
     str_strip_whitespace=True
   )
+
+  @field_validator("purchasing_plase", "beneficiary", "recipient", mode="before")
+  @classmethod
+  def validate_empty_string(cls, v, info):
+    if v is None or (isinstance(v, str) and v.strip() == ""):
+      raise ValueError(f"The field '{info.field_name}' cannot be empty.")
+    return v
 
 class UpdatePurchaseSchema(BasePurchaseSchema2):
   pass

@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from rich import  print
 
 from typing import Annotated, List
@@ -14,7 +15,7 @@ from ..schema.item_transactions import (
   GetFullTransactions2,
   Order,
   OrderBy,
-  GetBySchema
+  GetByDateSchema
 )
 from ..db.models import UserModel
 from ..dependencies.auth import get_current_user, require_roles
@@ -44,9 +45,9 @@ route = APIRouter(
 
 
 @route.get('/',description=see_role_des, status_code= status.HTTP_200_OK, response_model=List[GetFullTransactions2])
-async def get_all_items_transactions(
+async def get_all_items_transactions(*,
     repo: Annotated[ItemTransactionsRepository, Depends(get_items_transactions_repo)],
-    filters: Annotated[GetBySchema, Depends()],
+    filters: Annotated[GetByDateSchema, Depends()],
     order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
     order: Annotated[Order, Query()] = Order.ASC,
 ):

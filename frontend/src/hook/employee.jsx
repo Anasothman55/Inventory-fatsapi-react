@@ -1,5 +1,5 @@
 
-import { createEmployeeInfoRes, createEmployeeRes, deleteEmployeeRes, firedEmployeeInfoRes, getAllEmployeesRes, getOneEmployeeRes, updateEmployeeInfoRes, updateEmployeeRes } from "@/routes/employee.route"
+import { createEmployeeInfoRes, createEmployeeRes, deleteEmployeeRes, firedEmployeeInfoRes, getAllEmployeesNameRes, getAllEmployeesRes, getOneEmployeeRes, updateEmployeeInfoRes, updateEmployeeRes } from "@/routes/employee.route"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 
@@ -14,6 +14,14 @@ export const useEmployeesData = () =>(
   })
 )
 
+export const useEmployeesNameData = () =>(
+  useQuery({
+    queryKey: ["employees-all-name"],
+    queryFn: () => getAllEmployeesNameRes(),
+    staleTime: 10000,
+    retry: false,
+  })
+)
 
 export const useEmployeeOneData = (id) =>(
   useQuery({

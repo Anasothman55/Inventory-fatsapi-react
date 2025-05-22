@@ -33,16 +33,26 @@ const TableComponents = ({ data, header , types}) => {
     });
   };
 
+  const getValueByPath = (obj, path) => {
+    return path.split('.').reduce((acc, part) => acc?.[part], obj);
+  };
+
+  const normalize = (val) => {
+    if (typeof val === 'string' && !isNaN(val)) {
+      return parseFloat(val); // convert currency-like strings to numbers
+    }
+    return val;
+  };
+
   const sortedData = [...data].sort((a, b) => {
-    const aValue = a[sortConfig.key];
-    const bValue = b[sortConfig.key];
+    const aValue = normalize(getValueByPath(a, sortConfig.key));
+    const bValue = normalize(getValueByPath(b, sortConfig.key));
 
     if (aValue < bValue) return sortConfig.direction === "ascending" ? -1 : 1;
     if (aValue > bValue) return sortConfig.direction === "ascending" ? 1 : -1;
     return 0;
   });
 
-  
   return (
     <Table className="min-w-[800px]  table-auto bg-white ">
       <TableHeader className={""}>

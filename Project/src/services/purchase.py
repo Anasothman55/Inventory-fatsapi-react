@@ -72,3 +72,20 @@ async def delete_purchase_services(
       ], return_exceptions=True)
   await repo.delete_row(purchase)
   return None
+
+async def delete_purchase_services2(
+    repo: PurchasesRepository, 
+    uid: uuid.UUID, 
+    item_purchase_repo: PurchasesItemsRepository,
+    cookies: Dict
+    ) -> None:
+
+  purchase = await get_one_purchase_services(repo,uid)
+  pi = await item_purchase_repo.get_by_purchase_uid(purchase.uid)
+  
+  if pi:
+    for i in pi:
+      await item_purchase_repo.delete_row(i.uid)
+  await repo.delete_row(purchase)
+  return None
+

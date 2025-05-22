@@ -38,6 +38,7 @@ const ChoseItemCombo = ({ value, onChange }) => {
   
   const filteredData = data?.filter(item =>
     item.item_name.includes(search)
+    
   )
 
   return (

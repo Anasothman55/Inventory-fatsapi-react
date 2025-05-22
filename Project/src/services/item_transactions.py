@@ -1,3 +1,4 @@
+from hmac import new
 import uuid
 
 from ..schema.item_transactions import ActionType
@@ -55,7 +56,6 @@ async def update_item_transactions_sservice(
 ):
   transaction = await get_one_transaction_service(repo, uid)
   items = await get_one_items_services(items_repo, transaction.item_uid)
-
   abc_qty = abs(transaction.quantity - new_data.quantity)
 
   stock =  update_transactions_utils(items.stock, abc_qty,new_data.quantity ,transaction.quantity, transaction.action_type)

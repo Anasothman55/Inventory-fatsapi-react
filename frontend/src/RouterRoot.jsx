@@ -4,12 +4,12 @@ import { CategoryDetails, EmployeeInfoPage, HomePage, ItemsDetailPage, LoginPage
 import { InlineIcon } from "@iconify/react/dist/iconify.js";
 import { UseRedirectAuth,UseProtectedRoute } from "./store/useAuthStore";
 import EmployeeLayout from "./layout/EmployeeLayout";
-import path from "path";
 import EmployeeAddInfoPage from "./pages/employees/EmployeeAddInfoPage";
 import PurchaseLayout from "./layout/PurchaseLayout";
 import MainTransactionPage from "./pages/transactions/MainTransactionPage";
 import PurchaseAddDetailPage from "@/pages/purchase/PurchaseAddDetailPage.jsx";
 import PurchaseItemDetailPage from "./pages/purchase/PurchaseItemDetailPage";
+import UpdateTransactionPage from "./pages/transactions/UpdateTransactionPage";
 
 
 
@@ -53,6 +53,9 @@ export const  route = createBrowserRouter([
       },
       {
         path: "transaction", element:< MainTransactionPage/>,
+      },
+      {
+        path: "transaction/:id", element:< UpdateTransactionPage/>
       }
     ]
   },

@@ -39,7 +39,7 @@ const ErrorComponents = ({ error , redirect, act= true}) => {
       <div >
         {
           error.response.data.detail.map((err, index) => (
-            <p key={index} className='text-red-500 text-sm'> <span>{err.loc[1]}:</span> {err.msg}</p>
+            <p key={index} className='text-red-500 text-sm'> <span>• {err.loc[1]}:</span> {err.msg}</p>
           ))
         }
       </div>

@@ -18,6 +18,11 @@ export const getAllEmployeesRes = async ( )=>{
   return res.data
 }
 
+export const getAllEmployeesNameRes = async ( )=>{
+  const res = await empApi.get(`/name?order_by=created_at&order=desc`)
+  return res.data
+}
+
 export const getOneEmployeeRes = async (id)=>{
   const res = await empApi.get(`/${id}`)
   return res.data

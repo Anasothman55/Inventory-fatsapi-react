@@ -1,4 +1,5 @@
 from datetime import date, time, datetime, timezone
+from tracemalloc import start
 import uuid
 import enum
 from typing import  Optional
@@ -31,6 +32,7 @@ def get_time()-> time:
 
 class EmployeeName(BaseModel):
   name: str
+  uid: uuid.UUID
 
 class EmployeeNameWithUid(BaseModel):
   uid: uuid.UUID
@@ -111,7 +113,6 @@ class GetFullItemsWithTransactions(GetFullTransactions1):
   employee_model: EmployeeNameWithUid
 
 
-class GetBySchema(BaseModel):
-  quantity: int | None = None
-  transaction_date: date | None = None
-  transaction_time: time | None = None
+class GetByDateSchema(BaseModel):
+  start: date | None = date(1900,1,1)
+  end: date | None = date.today()
