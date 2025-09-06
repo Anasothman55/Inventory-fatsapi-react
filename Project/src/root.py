@@ -1,3 +1,4 @@
+from logging import root
 from fastapi import  APIRouter, Depends, Response, status, HTTPException,Request
 from typing import Annotated
 from sqlalchemy import  text
@@ -34,6 +35,8 @@ async def helth(db: Annotated[AsyncSession, Depends(get_db)]):
 
 
 
+
+
 @roots.get("/")
 @limiter.limit("10/minute", error_message="you rich your limit")
 async def root_route(request: Request):
@@ -48,6 +51,7 @@ from .routes.purchase import route as purchase_route
 from .routes.purchase_items import route as purchase_items_route
 from .routes.employee import route as employee_route
 from .routes.item_transactions import route as item_transaction_route
+from .routes.dashboard import route as dashboard_route
 
 roots.include_router(admin_route,prefix='/0a6c5da9793b254a/d658ddbfe93013bf/admin')
 roots.include_router(auth_route,prefix="/auth")
@@ -57,3 +61,4 @@ roots.include_router(employee_route, prefix="/employees")
 roots.include_router(purchase_route, prefix="/purchases")
 roots.include_router(purchase_items_route, prefix="/purchase-items")
 roots.include_router(item_transaction_route, prefix="/transactions")
+roots.include_router(dashboard_route, prefix="/dashboard")

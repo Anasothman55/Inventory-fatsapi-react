@@ -20,16 +20,13 @@ import ChoseItemCombo from "./ChoseItemCombo"
 import ActionSelector from "./ActionSelector"
 import TimePicker from "./TimePicker"
 import ChoseEmployeeCombo from "./ChoseEmployeeCombo"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 
 
 
-const TransactionMutateContainer = ({title,des,mutation,handleSubmit,btn, ...props}) => {
+const TransactionMutateContainer = ({mutation,handleSubmit,btn, ...props}) => {
   return (  
-    <DialogContent className="sm:max-w-[475px] h-[80vh]">
-      <DialogHeader> 
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{des}</DialogDescription>
-      </DialogHeader>
+    <CardContent>
       <ScrollArea className={"h-[100%] pr-4 overflow-auto"}>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
@@ -37,13 +34,10 @@ const TransactionMutateContainer = ({title,des,mutation,handleSubmit,btn, ...pro
               <Label htmlFor="item_uid" className="text-right">Items</Label>
               <ChoseItemCombo value={props.item_uid} onChange={props.setItemUid} />
             </div>
+            
             <div className="flex flex-col gap-2 justify-start">
               <Label htmlFor="quantity" className="text-right">Quantity</Label>
               <Input min={0} type="number" id="quantity" value={props.quantity} placeholder="0" onChange={(e) => props.setQuantity(e.target.value)}   className="col-span-3" />
-            </div>
-            <div  className="flex flex-col gap-2 justify-star">
-              <Label  htmlFor="Actions Type" className="text-right">Actions Type</Label>
-              <ActionSelector value={props.action_type} setOnChange={props.setActionType} />
             </div>
             <div className="flex flex-col gap-2 justify-start">
               <Label htmlFor="Transaction Date" className="text-right">Transaction Date</Label>
@@ -63,7 +57,7 @@ const TransactionMutateContainer = ({title,des,mutation,handleSubmit,btn, ...pro
             </div>
           </div>
 
-          <DialogFooter className="flex sm:flex-col mt-7">
+          <CardFooter className="flex sm:flex-col mt-7">
             <Button type="submit">{btn}</Button>
             <div>
               {
@@ -72,10 +66,10 @@ const TransactionMutateContainer = ({title,des,mutation,handleSubmit,btn, ...pro
                 </p>)
               }
             </div>
-          </DialogFooter>
+          </CardFooter>
         </form>
       </ScrollArea>
-    </DialogContent>
+    </CardContent>
   )
 }
 

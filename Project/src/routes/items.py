@@ -35,7 +35,8 @@ route = APIRouter(
 #asc
 
 
-alter_role = [RoleBase.ADMIN, RoleBase.STOCK_KIPPER]
+alter_role = [RoleBase.SUPER_ADMIN,RoleBase.ADMIN, RoleBase.STOCK_KIPPER, RoleBase.MANAGER_ASSISTANT]
+see_role = [RoleBase.ADMIN, RoleBase.MANAGER_ASSISTANT, RoleBase.ACCOUNTANT, RoleBase.MANAGER, RoleBase.SUPER_ADMIN]
 
 alter_role_des = f"""this route can use by all {RoleBase.ADMIN} and {RoleBase.STOCK_KIPPER} users"""
 admin_des = f"""this route can use by all {RoleBase.ADMIN} users"""
@@ -51,7 +52,7 @@ async def get_all_items(repo: Annotated[ItemsRepository, Depends(get_items_repo)
 
 
 @route.get('/', status_code= status.HTTP_200_OK, response_model=List[ItemFullSchema])
-async def get_all_items(
+async def get_all_items_basic(
     repo: Annotated[ItemsRepository, Depends(get_items_repo)],
     order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
     order: Annotated[Order, Query()] = Order.ASC,
@@ -72,6 +73,7 @@ async def create_items(
 
 @route.get('/{uid}',  status_code= status.HTTP_200_OK, response_model=GetItemFullJoin)
 async def get_one_items(
+    current_user: Annotated[UserModel , Depends(require_roles(see_role))],
     uid: Annotated[uuid.UUID, Path()],
     repo: Annotated[ItemsRepository, Depends(get_items_repo)],
 ):
@@ -90,7 +92,7 @@ async def update_items(
 
 @route.delete("/{uid}", status_code=status.HTTP_204_NO_CONTENT, description=admin_des)
 async def delete_items(
-    current_user: Annotated[UserModel, Depends(require_roles([RoleBase.ADMIN]))],
+    current_user: Annotated[UserModel, Depends(require_roles([RoleBase.ADMIN, RoleBase.SUPER_ADMIN]))],
     uid: Annotated[uuid.UUID, Path()],
     repo: Annotated[ItemsRepository, Depends(get_items_repo)],
 ):

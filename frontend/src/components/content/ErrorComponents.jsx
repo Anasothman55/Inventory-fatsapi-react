@@ -14,7 +14,9 @@ const ErrorComponents = ({ error , redirect, act= true}) => {
       nav(redirect);
     }
     
-    if(error.status === 401 || 
+    if(
+      error.status === 400 || 
+      error.status === 401 || 
       error.status === 403 || 
       error.status === 500 ||
       error.status === 409){
@@ -45,6 +47,7 @@ const ErrorComponents = ({ error , redirect, act= true}) => {
       </div>
     )
   } else if (
+     error.status === 400 || 
     error.status === 401 || 
     error.status === 403 || 
     error.status === 500 ||

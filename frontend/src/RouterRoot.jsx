@@ -10,7 +10,10 @@ import MainTransactionPage from "./pages/transactions/MainTransactionPage";
 import PurchaseAddDetailPage from "@/pages/purchase/PurchaseAddDetailPage.jsx";
 import PurchaseItemDetailPage from "./pages/purchase/PurchaseItemDetailPage";
 import UpdateTransactionPage from "./pages/transactions/UpdateTransactionPage";
-
+import ItemCreatePage from "./pages/items/ItemCreatePage";
+import CreateNewPurchase from "./pages/purchase/CreateNewPurchase";
+import UpdatePurchase from "./pages/purchase/updatePurchase";
+import CreateTransaction from "./pages/transactions/CreateTransaction";
 
 
 export const  route = createBrowserRouter([
@@ -32,6 +35,7 @@ export const  route = createBrowserRouter([
         children: [
           {index: true, element: <MainItemsPage/>},
           {path: ":id", element: <ItemsDetailPage/>},
+          {path: "mutate", element: <ItemCreatePage/>},
         ]
       },
       {
@@ -42,10 +46,12 @@ export const  route = createBrowserRouter([
           {path: ":id", element: <EmployeeInfoPage/>},
         ]
       },
-      {
+      { 
         path: "purchase", element: <PurchaseLayout/>,
         children: [
           {index: true, element: <MainPurchasePage/>},
+          {path: "new", element: <CreateNewPurchase/>},
+          {path: "update", element: <UpdatePurchase/>},
           {path: ":id", element: <PurchaseDetailPage/>},
           {path: ":id/purchase-info", element: <PurchaseAddDetailPage/>},
           {path: ":id/purchase-info/:pi_id", element: <PurchaseItemDetailPage/>},
@@ -53,6 +59,9 @@ export const  route = createBrowserRouter([
       },
       {
         path: "transaction", element:< MainTransactionPage/>,
+      },
+      {
+        path: 'transaction/new', element: <CreateTransaction/>
       },
       {
         path: "transaction/:id", element:< UpdateTransactionPage/>

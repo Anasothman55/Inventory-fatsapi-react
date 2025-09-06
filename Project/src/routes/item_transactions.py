@@ -10,6 +10,7 @@ import uuid
 from ..schema.auth import  RoleBase
 from ..schema.item_transactions import (
   CreateTransactions,
+  GetAllTransaction,
   UpdateTransactions,
   GetFullTransactions1,
   GetFullTransactions2,
@@ -29,8 +30,8 @@ from ..services.item_transactions import (
 )
 
 
-alter_role = [RoleBase.ADMIN, RoleBase.STOCK_KIPPER]
-see_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER,  RoleBase.STOCK_KIPPER]
+alter_role = [RoleBase.SUPER_ADMIN,RoleBase.ADMIN, RoleBase.STOCK_KIPPER]
+see_role = [RoleBase.SUPER_ADMIN, RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER,  RoleBase.STOCK_KIPPER, RoleBase.MANAGER_ASSISTANT]
 
 alter_role_des = f"""this route can use by all {"and ".join(alter_role)} users"""
 see_role_des = f"""this route can use by all {"and ".join(see_role)} users"""
@@ -44,8 +45,9 @@ route = APIRouter(
 )
 
 
-@route.get('/',description=see_role_des, status_code= status.HTTP_200_OK, response_model=List[GetFullTransactions2])
+@route.get('/', status_code= status.HTTP_200_OK, response_model=GetAllTransaction, description=see_role_des)
 async def get_all_items_transactions(*,
+    current_user: Annotated[UserModel , Depends(require_roles(see_role))],
     repo: Annotated[ItemTransactionsRepository, Depends(get_items_transactions_repo)],
     filters: Annotated[GetByDateSchema, Depends()],
     order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
@@ -66,6 +68,7 @@ async def create_items_transactions(
   return res
 @route.get('/{uid}',description=see_role_des, status_code= status.HTTP_200_OK, response_model=GetFullTransactions2)
 async def get_one_items_transactions(
+    current_user: Annotated[UserModel , Depends(require_roles(see_role))],
     uid: Annotated[uuid.UUID, Path()],
     repo: Annotated[ItemTransactionsRepository, Depends(get_items_transactions_repo)],
 ):

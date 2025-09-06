@@ -9,6 +9,8 @@ from pathlib import Path
 
 from datetime import datetime, timezone, timedelta
 
+from src.core.config import Settings, setting
+
 from .root import roots
 from .db.index import init_db, close_db_connection, get_db
 from .logging import configure_logging, LogLevels
@@ -36,12 +38,16 @@ app = FastAPI(title="FastAPI Project", version="0.1.0", lifespan=life_span)
 
 origins = [
   "http://localhost:5173",  # React Frontend
+  f"http://{setting.HOST}:5173",
   "http://127.0.0.1:5173",
+  "http://10.72.96.191:5173",
   "http://192.168.135.191:5173",
   "http://192.168.133.1:5173",
   "http://192.168.241.1:5173",
   "http://192.168.133.1:5173",
-  "http://192.168.1.122:5173"
+  "http://192.168.1.122:5173",
+  "http://10.138.128.191:5173",
+  "http://10.138.128.191:8000",
 ]
 
 app.add_middleware(

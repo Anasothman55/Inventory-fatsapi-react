@@ -1,9 +1,11 @@
 import {   DeleteItemButton, ErrorComponents, TableComponents, UpdateItemButton } from '@/components/content'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {  useItemsOneData } from '@/hook/itemsHook'
+import { InlineIcon } from '@iconify/react'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 // purchas_items_model
@@ -30,6 +32,7 @@ const header2 = [
 const ItemsDetailPage = () => {
   const [searchBoxTransactions, setSearchBoxTransactions] = useState('')
   const { id } = useParams()
+  const nav = useNavigate()
 
   const { data, isLoading, error, isError } = useItemsOneData(id)
   if (isLoading) {
@@ -40,6 +43,10 @@ const ItemsDetailPage = () => {
     return <div className='text-red-500 text-sm flex justify-center items-center'>
       <ErrorComponents error={error} redirect={"/items"}/>
     </div>
+  }
+
+  function handleUpdate() {
+    nav(`/items/mutate?id=${data?.uid}`)
   }
 
   const filteredDataTransactions = data.item_transaction_model.filter((item) =>
@@ -86,7 +93,7 @@ const ItemsDetailPage = () => {
 
         {/* Actions */}
         <div className="flex max-md:w-full  max-md:flex-col gap-5 max-md:mt-5">
-          <UpdateItemButton data={data}/>
+          <Button onClick={handleUpdate} className="hover:bg-white  cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-yellow-500 hover:border-yellow-500 "   variant="outline"> <span> <InlineIcon icon={"radix-icons:update"}/> </span> Update Item</Button>
           <DeleteItemButton uid={data.uid} name={data.item_name} />
         </div>
       </div>

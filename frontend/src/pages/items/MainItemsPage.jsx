@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useItemsData } from '@/hook/itemsHook';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { InlineIcon } from '@iconify/react';
 
 
 
@@ -20,6 +23,8 @@ const header = [
 
 const MainItemsPage = () => {
   const [searchBox, setSearchBox] = useState('')
+  const nav = useNavigate()
+
 
   const {data, isLoading, error, isError } = useItemsData()
   
@@ -37,6 +42,9 @@ const MainItemsPage = () => {
     item.item_name.toLowerCase().includes(searchBox.toLowerCase())
   );
 
+  function handleAdd() {
+    nav(`/items/mutate`)
+  }
 
   return (  
     <div  className='h-full flex flex-col '>
@@ -45,7 +53,7 @@ const MainItemsPage = () => {
       <h1 className='font-bold text-[32px] mt-5'>All Items</h1>
       
       <div className='flex justify-between max-md:flex-col mt-10  gap-5'>
-        <CreateItemButton/>
+        <Button  className="cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-emerald-700 hover:border-emerald-700"  variant="outline" onClick={handleAdd}> <span> <InlineIcon icon={"gala:add"}/></span> Add Items</Button>
         <Input value={searchBox} onChange={(e)=> setSearchBox(e.target.value)}    className="w-80 py-5 border border-gray-300 focus:ring-1 focus:ring-gray-300 ring-offset-2 transition-all duration-300 ease-in max-md:w-full "  type="text" placeholder="Search"/>
       </div>
 

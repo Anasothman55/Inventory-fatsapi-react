@@ -19,8 +19,9 @@ async def update_user_services(
     uid: uuid.UUID,
     new_data: UpdateUserSchema) -> UserModel:
   user = await get_one_user_services(repo,uid)
-  if user.role == RoleBase.ADMIN:
-    raise AlterAdminError
+  if RoleBase.SUPER_ADMIN not in user.role:
+    if RoleBase.ADMIN in user.role:
+      raise AlterAdminError
   user_data = new_data.model_dump()
   if user_data.get("password"):
     hashing = hash_password_utils(user_data.get("password"))
@@ -30,10 +31,11 @@ async def update_user_services(
 
 
 
-async def delete_user_services(repo: UserRepositoryUtils, uid: uuid.UUID) -> None:
+async def delete_user_services(repo: UserRepositoryUtils, uid: uuid.UUID, current_admin: UserModel) -> None:
   user = await get_one_user_services(repo,uid)
-  if user.role == RoleBase.ADMIN:
-    raise DeleteAdminError
+  if RoleBase.SUPER_ADMIN not in current_admin.role:
+    if RoleBase.ADMIN in user.role:
+      raise DeleteAdminError
   await repo.delete_row(user)
   return None
 

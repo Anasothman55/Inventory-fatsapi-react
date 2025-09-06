@@ -12,6 +12,7 @@ import { InlineIcon } from "@iconify/react"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
+import ErrorComponents from "../../ErrorComponents"
 
 const DeletePurchaseButton = ({uid, name}) => {
   const nav = useNavigate()
@@ -29,9 +30,11 @@ const DeletePurchaseButton = ({uid, name}) => {
     }
   },[deleteMutate.isSuccess])
   
-  if(deleteMutate.error?.code){
-    toast.error(deleteMutate.error.code)
+  if(deleteMutate.isError){
+    toast.error(deleteMutate.error.response?.data?.detail?.error)
   }
+
+
 
   return (
     <AlertDialog>

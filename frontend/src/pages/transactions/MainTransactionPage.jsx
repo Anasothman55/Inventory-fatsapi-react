@@ -3,14 +3,13 @@ import {  CreateItemButton, ErrorComponents, TableComponents } from '../../compo
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import CreatePurchaseButton from '@/components/content/dailog/purchases/CreatePurchaseButton';
 import { useTransactionsData } from '@/hook/transaction';
 import DateRange from '@/container/DateRange';
-import DatePicker from '@/container/DatePicker';
-import { Label } from '@/components/ui/label';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { parse, isValid, isAfter, format } from "date-fns";
 import CreateTransactionDailog from '@/components/content/dailog/transactions/CreateTransactionDailog';
+import { Button } from '@/components/ui/button';
+import {InlineIcon} from "@iconify/react";
 
 const header = [
   { name: "index", placeholder: "#" },
@@ -57,6 +56,8 @@ const MainTransactionPage = () => {
   const from = searchParams.get('from');
   const to = searchParams.get('to');
 
+  const nav = useNavigate()
+
 
   const [dateRange, setDateRange] = useState({
     from: from || today,
@@ -94,18 +95,30 @@ const MainTransactionPage = () => {
     end: dateRange.to,
   })
 
+
   if (isError) {
     return <div className='text-red-500 text-sm flex justify-center items-center'>{
       <ErrorComponents error={error} />
     }</div>
   }
 
-  const filteredData = data?.filter((transaction) =>
+  const filteredData = data?.items?.filter((transaction) =>
     transaction.employee_model.name.toLowerCase().includes(searchBox.toLowerCase()) || 
     transaction.items_model.item_name.toLowerCase().includes(searchBox.toLowerCase()) ||
     transaction.items_model.unit.toLowerCase().includes(searchBox.toLowerCase())    ||
     transaction.action_type.toLowerCase().includes(searchBox.toLowerCase())
   );
+
+
+  function handleIntakeTrnsaction(){
+    nav('/transaction/new?type=intake')
+  }
+
+  
+  function handleOutakeTrnsaction(){
+    nav('/transaction/new?type=outtake')
+  }
+
 
 
   return (  
@@ -114,9 +127,12 @@ const MainTransactionPage = () => {
       
       <h1 className='font-bold text-[32px] mt-5'>All Transaction</h1>
       
-      <div className='flex justify-between max-md:flex-col mt-10  gap-5'>
-        <CreateTransactionDailog/>
-        <div className='flex items-center gap-5 flex-wrap justify-between'>
+      <div className='flex justify-between max-md:flex-col mt-10 gap-5'>
+        <div className='flex gap-5 flex-wrap justify-start '>
+          <Button  onClick={handleOutakeTrnsaction} className={`max-md:w-full cursor-pointer py-5 px-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:bg-transparent hover:text-rose-500 hover:border-rose-500`}> <InlineIcon className={"text-rose-500"} icon={"solar:minus-circle-linear"}/>  Out Take</Button>
+          <Button  onClick={handleIntakeTrnsaction} className={`max-md:w-full cursor-pointer py-5 px-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:bg-transparent hover:text-emerald-500 hover:border-emerald-500`}> <InlineIcon className={"text-green-500"} icon={"gala:add"}/>  In Take</Button>
+      </div>
+        <div className='flex items-center gap-5 flex-wrap justify-between '>
           <DateRange new_date_range={dateRange} setDateRange={setDateRange} />
           <Input value={searchBox} onChange={(e)=> setSearchBox(e.target.value)}    className="w-80 py-5 border border-gray-300 focus:ring-1 focus:ring-gray-300 ring-offset-2 transition-all duration-300 ease-in max-md:w-full "  type="text" placeholder="Search"/>
         </div>
@@ -125,7 +141,7 @@ const MainTransactionPage = () => {
       {/* Render fetched category data here */}
       {
         !isLoading && (
-          data.length > 0 ? (
+          data?.total > 0 ? (
             <div className="mt-6 flex-grow min-h-[90vh] pb-4">
               <ScrollArea className="h-full w-full rounded-sm shadow-sm overflow-auto">
                 <div className="w-full overflow-x-auto">

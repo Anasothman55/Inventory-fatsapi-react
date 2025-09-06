@@ -28,8 +28,8 @@ from ..utils.items import ItemsRepository, get_items_repo
 
 
 
-alter_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.STOCK_KIPPER]
-see_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER]
+alter_role = [RoleBase.SUPER_ADMIN, RoleBase.ADMIN, RoleBase.ACCOUNTANT]
+see_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER, RoleBase.MANAGER_ASSISTANT, RoleBase.SUPER_ADMIN]
 
 alter_role_des = f"""this route can use by all {RoleBase.ADMIN} and { RoleBase.ACCOUNTANT} and {RoleBase.STOCK_KIPPER} users"""
 see_role_des = f"""this route can use by all {RoleBase.ADMIN} and {RoleBase.ACCOUNTANT} and {RoleBase.MANAGER} users"""
@@ -83,7 +83,7 @@ async def update_purchase_items(
   
 @route.delete("/{uid}",description=alter_role_des, status_code=status.HTTP_204_NO_CONTENT)
 async def delete_purchase_items(
-    current_user: Annotated[UserModel , Depends(require_roles([RoleBase.ADMIN]))],
+    current_user: Annotated[UserModel , Depends(require_roles([RoleBase.ADMIN, RoleBase.SUPER_ADMIN]))],
     uid: Annotated[uuid.UUID, Path()],
     repo: Annotated[PurchasesItemsRepository , Depends(get_purchases_items_repo)],
     items_repo: Annotated[ItemsRepository , Depends(get_items_repo)],

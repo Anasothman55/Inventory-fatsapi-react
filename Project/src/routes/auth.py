@@ -1,7 +1,8 @@
 
+from email.policy import HTTP
 from typing import Annotated
 
-from fastapi import  APIRouter, Response, status, Form,Depends
+from fastapi import  APIRouter, Response, status, Form,Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db.models import UserModel
@@ -19,12 +20,17 @@ route = APIRouter(tags=["auth"])
 
 
 
-@route.post("/signup", status_code= status.HTTP_201_CREATED)
+@route.post("/signup", status_code= status.HTTP_201_CREATED, deprecated=True)
 async def signup_route(
     user_model: Annotated[CreateIUserDict, Form()],
     user_repo: Annotated[UserRepositoryUtils,  Depends(get_user_repo)],):
+  
+  raise HTTPException(
+    status_code=status.HTTP_410_GONE,
+    detail="This endpoint is deprecated."
+  )
+  
   result = await register_crud(user_model,user_repo)
-
   return result
 
 

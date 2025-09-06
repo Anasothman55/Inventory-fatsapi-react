@@ -32,7 +32,7 @@ const PurchaseDetailPage = () => {
 
   if (isError) {
     return <div className='text-red-500 text-sm flex justify-center items-center'>
-      <ErrorComponents error={error} redirect={"/category"}/>
+      <ErrorComponents error={error} redirect={"/purchase"}/>
     </div>
   }
 
@@ -42,6 +42,11 @@ const PurchaseDetailPage = () => {
 
   const handleAddDetail = ()=>{
     nav(`/purchase/${id}/purchase-info`)
+  }
+
+
+  function handleUpdate() {
+    nav(`/purchase/update?id=${data?.uid}`)
   }
 
   return (
@@ -92,7 +97,7 @@ const PurchaseDetailPage = () => {
 
         {/* Actions */}
         <div className="flex max-md:w-full  max-md:flex-col gap-5 max-md:mt-5">
-          <UpdatePurchaseButton data={data} />
+          <Button onClick={handleUpdate} className="hover:bg-white  cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-yellow-500 hover:border-yellow-500 "   variant="outline"> <span> <InlineIcon icon={"radix-icons:update"}/> </span> Update Purchase</Button>
           <Button onClick={handleAddDetail} className="cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-emerald-700 hover:border-emerald-700 hover:bg-white"  variant="outline"> <span> <InlineIcon icon={"gala:add"}/></span> Add Details</Button>
           <DeletePurchaseButton uid={id} name={data.purchasing_plase} />
         </div>

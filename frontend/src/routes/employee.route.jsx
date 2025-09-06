@@ -2,9 +2,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-
-const baseUrl = "http://localhost:8000"
-//const hostUrl = "http://192.168.135.191:8000"
+import { baseUrl } from './url'; // Adjust the import path as necessary
 
 
 const empApi = axios.create({

@@ -18,11 +18,12 @@ from ..services.employee import (
 
 from rich import print
 
-alter_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT]
-see_role = [RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER]
+alter_role = [RoleBase.SUPER_ADMIN,RoleBase.ADMIN, RoleBase.MANAGER_ASSISTANT]
+see_role = [RoleBase.SUPER_ADMIN,RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER, RoleBase.MANAGER_ASSISTANT]
+see_role2 = [RoleBase.SUPER_ADMIN, RoleBase.ADMIN, RoleBase.ACCOUNTANT, RoleBase.MANAGER, RoleBase.MANAGER_ASSISTANT, RoleBase.STOCK_KIPPER]
 
 alter_role_des = f"""this route can use by all {RoleBase.ADMIN} and { RoleBase.ACCOUNTANT} users"""
-see_role_des = f"""this route can use by all {RoleBase.ADMIN} and {RoleBase.ACCOUNTANT} and {RoleBase.MANAGER} users"""
+see_role_des = f"""this route can use by all {RoleBase.ADMIN} and {RoleBase.ACCOUNTANT} and {RoleBase.MANAGER} and {RoleBase.MANAGER_ASSISTANT} users"""
 admin_des = f"""this route can use by all {RoleBase.ADMIN} users"""
 
 
@@ -35,19 +36,19 @@ route = APIRouter(
 
 route.include_router(emp_info_route, prefix="/employee-info")
 
-@route.get('/', response_model= List[EmployeeWithUseSchema], status_code= status.HTTP_200_OK)
+@route.get('/', response_model= List[EmployeeWithUseSchema], status_code= status.HTTP_200_OK, description=see_role_des)
 async def get_all_employee(
     current_user: Annotated[UserModel, Depends(require_roles(see_role))],
     repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
     order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
     order: Annotated[Order, Query()] = Order.ASC,
 ):
-  f"""this route can use by all users"""
   res = await repo.get_all(order,order_by)
   return res
 
 @route.get('/name', response_model= List[BaseEmployeeWithUidSchema], status_code= status.HTTP_200_OK)
 async def get_all_employee_name(
+    current_user: Annotated[UserModel, Depends(require_roles(see_role2))],
     repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
     order_by: Annotated[OrderBy, Query()] = OrderBy.CREATED_AT,
     order: Annotated[Order, Query()] = Order.ASC,
@@ -77,9 +78,9 @@ async def get_one_categories(
   return result
 
 
-@route.patch("/{uid}", status_code=status.HTTP_200_OK, description=admin_des )
+@route.patch("/{uid}", status_code=status.HTTP_200_OK, description=alter_role_des)
 async def update_category(
-    current_user: Annotated[UserModel, Depends(require_roles([RoleBase.ADMIN]))],
+    current_user: Annotated[UserModel, Depends(require_roles(alter_role))],
     uid: Annotated[uuid.UUID,Path(...)],
     new_data: Annotated[BaseEmployeeSchema, Form()],
     repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
@@ -89,7 +90,7 @@ async def update_category(
 
 @route.delete("/{uid}", status_code=status.HTTP_204_NO_CONTENT, description=admin_des)
 async def delete_category(
-    current_user: Annotated[UserModel, Depends(require_roles([RoleBase.ADMIN]))],
+    current_user: Annotated[UserModel, Depends(require_roles([RoleBase.ADMIN, RoleBase.SUPER_ADMIN]))],
     uid: Annotated[uuid.UUID, Path(...)],
     repo: Annotated[EmployeeRepository, Depends(get_employee_repo)],
 ):

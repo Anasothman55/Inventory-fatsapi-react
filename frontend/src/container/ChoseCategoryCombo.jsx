@@ -65,15 +65,15 @@ const ChoseCategoryCombo = ({ value, onChange }) => {
             <CommandGroup>
               {filteredData?.map((category) => (
                 <CommandItem
-                key={category.uid}
-                onSelect={() => {
-                  onChange(category.uid === value ? "" : category.uid)
-                  setOpen(false)
-                }}
-              >
-                {category.name}
-                <Check className={cn( "ml-auto",value === category.uid ? "opacity-100" : "opacity-0")}/>
-              </CommandItem>
+                  key={category.uid}
+                  value={category.uid}
+                  onSelect={() => {
+                    onChange(category.uid === value ? "" : category.uid)
+                    setOpen(false)
+                  }}>
+                  {category.name}
+                  <Check className={cn( "ml-auto",value === category.uid ? "opacity-100" : "opacity-0")}/>
+                </CommandItem>
               ))}
             </CommandGroup>
           </CommandList>

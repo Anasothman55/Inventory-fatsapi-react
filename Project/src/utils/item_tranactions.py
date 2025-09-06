@@ -1,3 +1,5 @@
+from multiprocessing.pool import AsyncResult
+import re
 from fastapi import Depends
 from sqlalchemy import Select
 
@@ -9,10 +11,10 @@ from ..exceptions.item_transactions import TransactionsStock
 
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import between, select , desc, asc
+from sqlmodel import between, select , desc, asc, func
 
-from datetime import date, time
-from typing import Any, Annotated, Callable
+from datetime import date, datetime, time
+from typing import Any, Annotated, Callable, List
 import uuid
 
 class ItemTransactionsRepository:
@@ -53,27 +55,39 @@ class ItemTransactionsRepository:
     return await self._statement(field="transaction_time", value= transaction_time)
 
   async def get_all(self, order: Order, order_by: OrderBy,filters: GetByDateSchema):
-    order_column = getattr(self.model, order_by.value )
-
-    if order.value == "desc": order_column = desc(order_column)
-    else: order_column = asc(order_column)
-
-    statement: Select = select(self.model)
-
-    # Dynamically apply filters
-    #for field_name, value in filters.model_dump(exclude_none=True).items():
-    #  if hasattr(self.model, field_name):
-    #    statement = statement.where(getattr(self.model, field_name) == value)
+    order_column = getattr(self.model, order_by.value)
+    order_column = desc(order_column) if order.value == "desc" else asc(order_column)
     
-    statement = statement.where(
-      self.model.transaction_date.between(filters.start or date(1900,1,1), filters.end or date.today())
+    filter_clause = self.model.transaction_date.between(
+      filters.start or date(1900, 1, 1),
+      filters.end or date.today()
     )
     
-    # Apply ordering
-    statement = statement.order_by(order_column)
+    count_stmt = select(func.count()).select_from(self.model).where(filter_clause)
+    count_result = await self.db.execute(count_stmt)
+    total = count_result.scalar_one()
 
+    # Fetch records query
+    statement : Select = select(self.model).where(filter_clause).order_by(order_column)
+    
     result = await self.db.execute(statement)
-    return result.scalars().all()
+    items = result.scalars().all()
+
+    return {"total": total, "items": items}
+
+  async def get_all_dash(self) -> List[ItemTransactions]:
+    order_column = desc(getattr(self.model, OrderBy.CREATED_AT.value))  
+    statement : Select = select(self.model).options(
+      selectinload(self.model.items_model),
+      selectinload(self.model.employee_model)  
+    ).where(
+      self.model.transaction_date == date.today()
+    ).order_by(order_column)
+    
+    result = await self.db.execute(statement)
+    transactions = result.scalars().all()
+
+    return transactions
   async def create_row(self,new_row) -> ItemTransactions:
     self.db.add(new_row)
     return await self._commit_refresh(new_row)

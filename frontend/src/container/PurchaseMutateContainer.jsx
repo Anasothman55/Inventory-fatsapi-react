@@ -13,18 +13,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { ChoseCategoryCombo } from "@/container"
-import DatePicker from "./DatePicker"
 import CurruncySelector from "./CurruncySelector"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import DatePicker from "@/container/DatePicker"
+import { CardContent } from "@/components/ui/card"
 
 
-const PurchaseMutateContainer = ({title,des,mutation,handleSubmit,btn, ...props}) => {
+
+
+
+
+
+const PurchaseMutateContainer = ({mutation,handleSubmit,btn, ...props}) => {
   return (  
-    <DialogContent className="sm:max-w-[475px] h-[80vh]">
-      <DialogHeader> 
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{des}</DialogDescription>
-      </DialogHeader>
+    <CardContent>
       <ScrollArea className={"h-[100%] pr-4 overflow-auto"}>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
@@ -48,6 +50,7 @@ const PurchaseMutateContainer = ({title,des,mutation,handleSubmit,btn, ...props}
               <Label htmlFor="CuruncyType" className="text-right">Curuncy Type</Label>
               <CurruncySelector value={props.curuncy_type} setOnChange={props.setCuruncy_type}/>
             </div>
+
             <div className="flex flex-col gap-2 justify-start">
               <Label htmlFor="total_price" className="text-right">Total Price</Label>
               <Input type="number" id="total_price" value={props.total_price} onChange={(e) => props.setTotal_price(e.target.value)}   className="col-span-3" />
@@ -79,7 +82,7 @@ const PurchaseMutateContainer = ({title,des,mutation,handleSubmit,btn, ...props}
           </DialogFooter>
         </form>
       </ScrollArea>
-    </DialogContent>
+    </CardContent>
   )
 }
 

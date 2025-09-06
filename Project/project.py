@@ -1,5 +1,4 @@
 from src.core.config import setting
-from rich import print
 import uvicorn
 
 if __name__ == "__main__":

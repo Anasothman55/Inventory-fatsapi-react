@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
   DialogTrigger,
@@ -9,26 +10,28 @@ import PurchaseMutateContainer from "@/container/PurchaseMutateContainer"
 import {useSetPurchase, useUpdatePurchase} from "@/hook/purchaseHook"
 import { InlineIcon } from "@iconify/react"
 import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 
 
 
 const UpdatePurchaseButton = ({data}) => {
-  const [purchasing_plase , setPurchasing_plase ] = useState(data.purchasing_plase)
-  const [purchaser, setPurchaser] = useState(data.purchaser)
-  const [beneficiary , setBeneficiary ] = useState(data.beneficiary)
-  const [curuncy_type , setCuruncy_type ] = useState(data.curuncy_type)
-  const [total_price , setTotal_price ] = useState(data.total_price)
-  const [recipient , setRecipient ] = useState(data.recipient)
-  const [receipt_number , setReceipt_number ] = useState(data.receipt_number)
-  const [note, setNote] = useState(data.note)
-  const [purchase_date, setPurchase_date] = useState(data.purchase_date)
 
-  const [open, setOpen] = useState(false)
+  const [purchasing_plase , setPurchasing_plase ] = useState(data?.purchasing_plase)
+  const [purchaser, setPurchaser] = useState(data?.purchaser)
+  const [beneficiary , setBeneficiary ] = useState(data?.beneficiary)
+  const [curuncy_type , setCuruncy_type ] = useState(data?.curuncy_type)
+  const [total_price , setTotal_price ] = useState(data?.total_price)
+  const [recipient , setRecipient ] = useState(data?.recipient)
+  const [receipt_number , setReceipt_number ] = useState(data?.receipt_number)
+  const [note, setNote] = useState(data?.note)
+  const [purchase_date, setPurchase_date] = useState(data?.purchase_date)
+
+  const nav = useNavigate()
 
 
-  const mutation = useUpdatePurchase(data.uid)
+  const mutation = useUpdatePurchase(data?.uid)
   const handleSubmit = (e) => {
     e.preventDefault()
     mutation.mutate({purchasing_plase,purchaser,beneficiary,curuncy_type,total_price,receipt_number,recipient,note,purchase_date})
@@ -36,30 +39,33 @@ const UpdatePurchaseButton = ({data}) => {
 
   useEffect(()=>{
     if(mutation.isSuccess){
-      setOpen(false)
-      setPurchasing_plase(data.purchasing_plase)
-      setPurchaser(data.purchaser)
-      setBeneficiary(data.beneficiary)
-      setCuruncy_type(data.curuncy_type)
-      setTotal_price(data.total_price)
-      setReceipt_number(data.receipt_number)
-      setRecipient(data.recipient )
-      setNote(data.note)
-      setPurchase_date(data.purchase_date)
+      setPurchasing_plase(data?.purchasing_plase)
+      setPurchaser(data?.purchaser)
+      setBeneficiary(data?.beneficiary)
+      setCuruncy_type(data?.curuncy_type)
+      setTotal_price(data?.total_price)
+      setReceipt_number(data?.receipt_number)
+      setRecipient(data?.recipient )
+      setNote(data?.note)
+      setPurchase_date(data?.purchase_date)
 
-      toast.success(`Purchase ${data.purchasing_plase} Update succsessfully`)
+      toast.success(`Purchase ${data?.purchasing_plase} Update succsessfully`)
+      nav(`/purchase/${data?.uid}`)
     }
 
   },[mutation.isSuccess,])
 
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="hover:bg-white  cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-yellow-500 hover:border-yellow-500 "   variant="outline"> <span> <InlineIcon icon={"radix-icons:update"}/></span> Update Purchase</Button>
-      </DialogTrigger>
+
+    <Card className="w-full max-w-[600px]">
+      <CardHeader>
+        <CardTitle className="text-[30px]">Update {data?.purchasing_plase}</CardTitle>
+        
+        <CardDescription>for updating purchase replace the old value with new one</CardDescription>
+      </CardHeader>
       <PurchaseMutateContainer
-        title={`${data.receipt_number} : ${data.purchasing_plase}`}
+        title={`${data?.receipt_number} : ${data?.purchasing_plase}`}
         des={"For updating purchase you need to change this form input"}
         mutation={mutation}
         handleSubmit={handleSubmit}
@@ -83,7 +89,8 @@ const UpdatePurchaseButton = ({data}) => {
         purchase_date ={purchase_date}
         setPurchase_date ={setPurchase_date}
       />
-    </Dialog>
+
+    </Card>
   )
 }
 export default UpdatePurchaseButton

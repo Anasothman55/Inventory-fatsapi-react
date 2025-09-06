@@ -22,9 +22,11 @@ class OrderBy(StrEnum):
 class RoleBase(StrEnum):
   USER = "user"
   ADMIN = "admin"
+  SUPER_ADMIN = "super_admin"
   ACCOUNTANT = "accountant"
   STOCK_KIPPER = "stock_kipper"
   MANAGER = "manager"
+  MANAGER_ASSISTANT = "manager_assistant"
 
 
 class UserBase(BaseModel):

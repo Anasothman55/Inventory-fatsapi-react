@@ -1,19 +1,12 @@
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 import {  ItemMutateContainer } from "@/container"
 
 import { useSetItems } from "@/hook/itemsHook"
 import { InlineIcon } from "@iconify/react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 const CreateItemButton = () => {
@@ -21,12 +14,11 @@ const CreateItemButton = () => {
   const [item_name, setItemName] = useState("")
   const [stock, setStock] = useState(0)
   const [unit, setUnit] = useState("")
-  const [minimum_stock_level, setMinimumStockLevel] = useState(0)
+  const [minimum_stock_level, setMinimumStockLevel] = useState()
   const [description, setDescription] = useState("")
   const [category_uid, setCategoryUid] = useState("")
 
-  const [open, setOpen] = useState(false)
-
+  const nav = useNavigate()
 
   const mutation = useSetItems()
   const handleSubmit = (e) => {
@@ -38,7 +30,6 @@ const CreateItemButton = () => {
 
   useEffect(()=>{
     if(mutation.isSuccess){
-      setOpen(false)
       setItemName("")
       setStock(0)
       setUnit("")
@@ -47,18 +38,20 @@ const CreateItemButton = () => {
       setCategoryUid("")
 
       toast.success("Item create succsessfully")
+      nav(`/items`)
     }
 
   },[mutation.isSuccess,])
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-emerald-700 hover:border-emerald-700"  variant="outline"> <span> <InlineIcon icon={"gala:add"}/></span> Add Items</Button>
-      </DialogTrigger>
+
+    <Card className="w-full max-w-[600px]">
+      <CardHeader>
+        <CardTitle className="text-[30px]">Add new Item</CardTitle>
+        
+        <CardDescription>for add new item you need fill all text box</CardDescription>
+      </CardHeader>
       <ItemMutateContainer
-        title={"Create New Item"}
-        des={"For creating item you just need to enter the name"}
         mutation={mutation}
         handleSubmit={handleSubmit}
         btn="Create"
@@ -73,9 +66,9 @@ const CreateItemButton = () => {
         description={description}
         setDescription={setDescription}
         category_uid={category_uid}
-        setCategoryUid={setCategoryUid}
-      />
-    </Dialog>
+        setCategoryUid={setCategoryUid}/>
+
+    </Card>
   )
 }
 

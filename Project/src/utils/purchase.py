@@ -1,4 +1,8 @@
+from collections import defaultdict
+from functools import reduce
 from fastapi import Depends
+from sqlalchemy import Result, Select, func
+from rich import print
 
 from ..db.index import get_db
 from ..db.models import PurchaseModel
@@ -62,14 +66,28 @@ class PurchasesRepository:
     result = await self.db.execute(statement)
     return result.scalars().all()
 
+  async def get_all_dash(self):
+    order_column = desc(getattr(self.model, OrderBy.PURCHASE_DATE.value ))
+    statement : Select = select(self.model.purchase_date, self.model.curuncy_type, func.sum(self.model.total_price))
+    group = statement.group_by(self.model.purchase_date, self.model.curuncy_type).order_by(order_column)
+    result = await self.db.execute(group)
+    rows = result.all()
+  
+    grouped = defaultdict(dict)
+
+    for purchase_date, currency, total in rows:
+      grouped[purchase_date]["date"] = purchase_date
+      grouped[purchase_date][currency] = total
+
+    return list(grouped.values())
+ 
   async def create_row(self,new_row) -> PurchaseModel:
     self.db.add(new_row)
     return await self._commit_refresh(new_row)
 
   async def update_row(self, req_data:dict, row_model: PurchaseModel) -> PurchaseModel:
     for key, value in req_data.items():
-      if value:
-        setattr(row_model,key,value)
+      setattr(row_model,key,value)
     return await self._commit_refresh(row_model)
 
 async def get_purchases_repo(db: Annotated[AsyncSession, Depends(get_db)]):

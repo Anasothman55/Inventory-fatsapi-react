@@ -30,10 +30,8 @@ class UserModel(SQLModel, table= True):
   is_active: bool = Field(default=True)
   password: str = Field(exclude=True, nullable=True)
   last_login_date: datetime = Field(sa_column=Column( DateTime(timezone=True), nullable=True ))
-  
-  
-  category_model: Optional["CategoryModel"] = Relationship(back_populates="user_model", sa_relationship_kwargs={"lazy": "selectin"})
 
+  category_model: Optional["CategoryModel"] = Relationship(back_populates="user_model", sa_relationship_kwargs={"lazy": "selectin"})
 
   created_at: datetime = Field(default_factory=get_current_time,sa_column=Column(TIMESTAMP(timezone=True)))
   updated_at: datetime = Field(default_factory=get_current_time,sa_column=Column(TIMESTAMP(timezone=True),onupdate=get_current_time))
@@ -114,7 +112,7 @@ class PurchaseModel(SQLModel, table= True):
   updated_at: datetime = Field(default_factory=get_current_time,sa_column=Column(TIMESTAMP(timezone=True),onupdate=get_current_time))
 
   def __repr__(self):
-    return f"<Book {self.purchaser}>"
+    return f"<Purchase {self.purchaser}>"
 
 
 class PurchaseItemsModel(SQLModel, table= True):
@@ -218,9 +216,10 @@ class ItemTransactions(SQLModel, table=True):
   updated_at: datetime = Field(default_factory=get_current_time,sa_column=Column(TIMESTAMP(timezone=True),onupdate=get_current_time))
 
   def __repr__(self):
-    return f"<Book {self.uid}>"
-
-
-
-
-
+    try:
+      # Try to access the uid attribute
+      uid_value = self.uid
+      return f"<Transactions {uid_value}>"
+    except Exception:
+      # If we can't access uid (detached instance), use the object id
+      return f"<Transactions (detached) {id(self)}>"

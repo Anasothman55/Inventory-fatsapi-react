@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
   DialogTrigger,
@@ -24,7 +25,6 @@ const CreatePurchaseButton = () => {
   const [note, setNote] = useState("")
   const [purchase_date, setPurchase_date] = useState(new Date())
 
-  const [open, setOpen] = useState(false)
 
 
   const mutation = useSetPurchase()
@@ -35,7 +35,6 @@ const CreatePurchaseButton = () => {
 
   useEffect(()=>{
     if(mutation.isSuccess){
-      setOpen(false)
       setPurchasing_plase("")
       setPurchaser("")
       setBeneficiary("")
@@ -52,13 +51,14 @@ const CreatePurchaseButton = () => {
   },[mutation.isSuccess,])
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-emerald-700 hover:border-emerald-700 hover:bg-white"  variant="outline"> <span> <InlineIcon icon={"gala:add"}/></span> Add Purchase</Button>
-      </DialogTrigger>
+
+    <Card className="w-full max-w-[600px]">
+      <CardHeader>
+        <CardTitle className="text-[30px]">Add new Purchase</CardTitle>
+        
+        <CardTitle>for add new purchase you need fill all text box</CardTitle>
+      </CardHeader>
       <PurchaseMutateContainer
-        title={"Create New Purchase"}
-        des={"For creating purchase you need to fill this form"}
         mutation={mutation}
         handleSubmit={handleSubmit}
         btn="Create"
@@ -81,7 +81,8 @@ const CreatePurchaseButton = () => {
         purchase_date ={purchase_date}
         setPurchase_date ={setPurchase_date}
       />
-    </Dialog>
+
+    </Card>
   )
 }
 

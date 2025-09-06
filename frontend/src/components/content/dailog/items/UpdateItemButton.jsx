@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -17,22 +18,22 @@ import { ChoseCategoryCombo, ItemMutateContainer } from "@/container"
 import {  useUpdateItems } from "@/hook/itemsHook"
 import { InlineIcon } from "@iconify/react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 
 
 const UpdateItemButton = ({data}) => {
-  const [item_name, setItemName] = useState(data.item_name)
-  const [stock, setStock] = useState(data.stock)
-  const [unit, setUnit] = useState(data.unit)
-  const [minimum_stock_level, setMinimumStockLevel] = useState(data.minimum_stock_level)
-  const [description, setDescription] = useState(data.description)
-  const [category_uid, setCategoryUid] = useState(data.category_uid || "")
+  const [item_name, setItemName] = useState(data?.item_name)
+  const [stock, setStock] = useState(data?.stock)
+  const [unit, setUnit] = useState(data?.unit)
+  const [minimum_stock_level, setMinimumStockLevel] = useState(data?.minimum_stock_level)
+  const [description, setDescription] = useState(data?.description)
+  const [category_uid, setCategoryUid] = useState(data?.category_uid || "")
 
-  const [open, setOpen] = useState(false)
-
-
-  const mutation = useUpdateItems(data.uid)
+  const nav = useNavigate()
+   
+  const mutation = useUpdateItems(data?.uid)
   const handleSubmit = (e) => {
     e.preventDefault()
     mutation.mutate({item_name, stock, unit, minimum_stock_level, description,category_uid})
@@ -40,27 +41,22 @@ const UpdateItemButton = ({data}) => {
 
   useEffect(()=>{
     if(mutation.isSuccess){
-      setOpen(false)
-      setItemName("")
-      setStock(0)
-      setUnit("")
-      setMinimumStockLevel(0)
-      setDescription("")
-      setCategoryUid("")
 
       toast.success("Item update succsessfully")
+      nav(`/items/${data?.uid}`)
     }
 
   },[mutation.isSuccess,])
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="hover:bg-white  cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-yellow-500 hover:border-yellow-500 "   variant="outline"> <span> <InlineIcon icon={"radix-icons:update"}/> </span> Update Item</Button>
-      </DialogTrigger>
+
+    <Card className="w-full max-w-[600px]">
+      <CardHeader>
+        <CardTitle className="text-[30px]">Update {item_name}</CardTitle>
+        
+        <CardDescription>for updating item replace the old value with new one</CardDescription>
+      </CardHeader>
       <ItemMutateContainer
-        title={`Update ${data.item_name}`}
-        des={"Update the item data"}
         mutation={mutation}
         handleSubmit={handleSubmit}
         btn="Update"
@@ -77,7 +73,8 @@ const UpdateItemButton = ({data}) => {
         category_uid={category_uid}
         setCategoryUid={setCategoryUid}
       />
-    </Dialog>
+
+    </Card>
   )
 }
 

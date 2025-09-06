@@ -33,6 +33,8 @@ class ItemCategoryRes(ItemsBaseSchema):
 class ItemsBasicSchema(BaseModel):
   uid: uuid.UUID | None = None
   item_name : str
+  stock : int | None = None
+
 
 class CreateItemSchema(ItemsBaseSchema):
   description: str | None = None

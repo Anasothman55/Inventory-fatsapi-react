@@ -1,6 +1,7 @@
 
 
 import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -20,16 +21,14 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 
-const CreateTransactionDailog = () => {
+const CreateTransactionDailog = ({action_type}) => {
   const [item_uid, setItemUid] = useState("")
   const [quantity, setQuantity] = useState(0)
-  const [action_type, setActionType] = useState("") 
   const [transaction_date, setTransactionDate] = useState(new Date())
   const [transaction_time, setTransactionTime] = useState(new Date())
   const [employee_uid , setEmployeeUid ] = useState("")
   const [note, setNote] = useState("")
 
-  const [open, setOpen] = useState(false)
 
 
   const mutation = useSetTransaction()
@@ -47,10 +46,8 @@ const CreateTransactionDailog = () => {
 
   useEffect(()=>{
     if(mutation.isSuccess){
-      setOpen(false)
       setItemUid("")
       setQuantity(0)
-      setActionType("")
       setTransactionDate(new Date())
       setTransactionTime(new Date())
       setEmployeeUid("")
@@ -62,10 +59,13 @@ const CreateTransactionDailog = () => {
   },[mutation.isSuccess,])
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="cursor-pointer  py-5 border-1 border-gray-300 foucus:ring-1 focus:ring-gray-300 ring-offset-2 hover:text-emerald-700 hover:border-emerald-700"  variant="outline"> <span> <InlineIcon icon={"gala:add"}/></span> Add Transaction</Button>
-      </DialogTrigger>
+    <Card className="w-full max-w-[600px]">
+      <CardHeader>
+        <CardTitle className="text-[30px]">
+          {action_type == 'intake' ? "In tak Item": "Out Take Item"}
+        </CardTitle>
+      </CardHeader>
+
       <TransactionMutateContainer
         title={"Create New Transaction"}
         des={"For creating transaction you need to fill this form"}
@@ -76,8 +76,6 @@ const CreateTransactionDailog = () => {
         setItemUid={setItemUid}
         quantity={quantity}
         setQuantity={setQuantity}
-        action_type={action_type}
-        setActionType={setActionType}
         transaction_date={transaction_date}
         setTransactionDate={setTransactionDate}
         transaction_time={transaction_time}
@@ -87,7 +85,7 @@ const CreateTransactionDailog = () => {
         note={note}
         setNote={setNote}
       />
-    </Dialog>
+    </Card>
   )
 }
 

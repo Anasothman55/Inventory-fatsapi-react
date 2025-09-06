@@ -1,6 +1,6 @@
 
-import { ErrorComponents } from "@/components/content"
 import { Button } from "@/components/ui/button"
+import { CardContent } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -16,19 +16,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { ChoseCategoryCombo } from "@/container"
 
 
-const ItemMutateContainer = ({title,des,mutation,handleSubmit,btn, ...props}) => {
+const ItemMutateContainer = ({mutation,handleSubmit,btn, ...props}) => {
   return (
-    <DialogContent className="sm:max-w-[475px]">
-      <DialogHeader>
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{des}</DialogDescription>
-        {
-          mutation.error && (<p>
-              <ErrorComponents error={mutation.error} act={false}/>
-          </p>)
-
-        }
-      </DialogHeader>
+    <CardContent>
       <form onSubmit={handleSubmit}>
         <div className="grid gap-4 py-4">
           <div className="flex flex-col gap-2 justify-star">
@@ -82,7 +72,7 @@ const ItemMutateContainer = ({title,des,mutation,handleSubmit,btn, ...props}) =>
           <Button type="submit">{btn}</Button>
         </DialogFooter>
       </form>
-    </DialogContent>
+    </CardContent>
   )
 }
 

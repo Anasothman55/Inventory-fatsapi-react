@@ -6,7 +6,7 @@ from ..schema.items import ItemFullSchema, Order, OrderBy
 
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select,desc, asc
+from sqlmodel import and_, select,desc, asc
 from typing import Any, Annotated, List
 import uuid
 
@@ -42,7 +42,7 @@ class ItemsRepository:
     return await self._statement(field="category_uid", value= uid)
 
 
-  async def get_all(self, order: Order, order_by: OrderBy)->List[ItemFullSchema]:
+  async def get_all(self, order: Order = Order.DESC, order_by: OrderBy = OrderBy.CREATED_AT)->List[ItemFullSchema]:
     order_column = getattr(self.model, order_by.value )
 
     if order.value == "desc":
@@ -59,6 +59,17 @@ class ItemsRepository:
     result = await self.db.execute(statement)
     return result.scalars().all()
 
+  async def get_all_dash(self)->List[ItemsModel]:
+    order_column = desc(getattr(self.model, OrderBy.CREATED_AT.value))
+    statement = select(self.model).where(
+      and_(
+          self.model.stock <= self.model.minimum_stock_level,
+          self.model.minimum_stock_level != 0
+      )
+    ).order_by(order_column)
+    result = await self.db.execute(statement)
+    return result.scalars().all()
+  
   async def create_row(self,new_row) -> ItemsModel:
     self.db.add(new_row)
     return await self._commit_refresh(new_row)

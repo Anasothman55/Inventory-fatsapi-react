@@ -1,8 +1,8 @@
 
+from operator import le
 from typing import Dict
 import  uuid
 import asyncio
-import httpx 
 
 
 from sqlalchemy.exc import IntegrityError
@@ -64,12 +64,13 @@ async def delete_purchase_services(
   purchase = await get_one_purchase_services(repo,uid)
   pi = await item_purchase_repo.get_by_purchase_uid(purchase.uid)
   
-  if pi:
-    pi_uid = [i.uid for i in pi]
-    async with httpx.AsyncClient(cookies=cookies) as client:
-      await asyncio.gather(*[
-        client.delete(f'http://{setting.HOST}:8000/purchase-items/{i}') for i in pi_uid
-      ], return_exceptions=True)
+  if len(pi) != 0:
+    raise HTTPException(
+      status_code=status.HTTP_400_BAD_REQUEST,
+      detail={
+        "error":"There are item relate to this purchase"
+      }
+    )
   await repo.delete_row(purchase)
   return None
 

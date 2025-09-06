@@ -2,7 +2,7 @@ from datetime import date, time, datetime, timezone
 from tracemalloc import start
 import uuid
 import enum
-from typing import  Optional
+from typing import  Optional, List
 
 from pydantic import BaseModel,Field, ConfigDict, field_validator
 
@@ -49,6 +49,7 @@ class ItemName(BaseModel):
 class ActionType(enum.StrEnum):
   USE = 'use'
   RETURN = 'return'
+  SEND_BACK = 'send_back'
 
 class BaseTransactions(BaseModel):
   quantity: int = Field(...,gt=0,)
@@ -105,6 +106,12 @@ class GetFullTransactions2(CreateTransactions,TimeSchema):
   uid: uuid.UUID
   employee_model: EmployeeName
   items_model: ItemName
+
+
+class GetAllTransaction(BaseModel):
+  total: int
+  items: List[GetFullTransactions2]
+
 
 class GetFullEmployeeWithTransactions(GetFullTransactions1):
   items_model: ItemName

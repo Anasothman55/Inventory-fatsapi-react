@@ -1,0 +1,159 @@
+{
+  "categories" : [
+    {
+      "http": "get",
+      "path": "/categories",
+      "role": ["all"]
+    },
+    {
+      "http": "post",
+      "path": "/categories",
+      "role": ["super_admin", "admin", "manager_assistant"]
+    },
+    {
+      "http": "get",
+      "path": "/categories/uid",
+      "role": ["all"]
+    },
+    {
+      "http": "patch",
+      "path": "/categories/uid",
+      "role": ["super_admin", "admin", "manager_assistant"]
+    },
+    {
+      "http": "delete",
+      "path": "/categories/uid",
+      "role": ["super_admin", "admin"]
+    }
+  ],
+  "employee": [
+    {
+      "http": "get",
+      "path": "/employee",
+      "role": ["accountant", "manager","super_admin", "admin", "manager_assistant"]
+    },
+    {
+      "http": "get",
+      "path": "/employee/uid",
+      "role": ["accountant", "manager","super_admin", "admin", "manager_assistant"]
+    },
+    {
+      "http": "get",
+      "path": "/employee/name",
+      "role": ["accountant", "manager","super_admin", "admin", "manager_assistant","stock_kipper" ]
+    },
+    {
+      "http": "post",
+      "path": "/employee/uid",
+      "role": ["super_admin", "admin", "manager_assistant"]
+    },
+    {
+      "http": "patch",
+      "path": "/employee/uid",
+      "role": ["super_admin", "admin", "manager_assistant"]
+    },
+    {
+      "http": "patch",
+      "path": "/employee/uid",
+      "role": ["super_admin", "admin"]
+    }
+  ],
+  "employee-info": [
+    {
+      "http": "post",
+      "path": "/employee/employee-info/uid",
+      "role": ["super_admin", "admin", "manager_assistant"]
+    },
+    {
+      "http": "patch",
+      "path": "/employee/employee-info/uid",
+      "role": ["super_admin", "admin", "manager_assistant"]
+    }
+  ],
+  "items": [
+    {
+      "http": "get",
+      "path": "/items/basic",
+      "role": ["all"]
+    },
+    {
+      "http": "get",
+      "path": "/items",
+      "role": ["all"]
+    },
+    {
+      "http": "get",
+      "path": "/items/uid",
+      "role": ["accountant", "admin", "super_admin","manager", "manager_assistant"]
+    },
+    {
+      "http": "post",
+      "path": "/items",
+      "role": ["stock_kipper", "admin", "super_admin", "manager_assistant"]
+    },
+    {
+      "http": "patch",
+      "path": "/items/uid",
+      "role": ["stock_kipper", "admin", "super_admin", "manager_assistant"]
+    },
+    {
+      "http": "delete",
+      "path": "/items/uid",
+      "role": [ "admin", "super_admin"]
+    }
+  ],
+  "purchase": [
+    {
+      "http": "get",
+      "path": "/purchase",
+      "role": [ "accountant", "admin", "super_admin","manager", "manager_assistant"]
+    },
+    {
+      "http": "get",
+      "path": "/purchase/uid",
+      "role": [ "accountant", "admin", "super_admin","manager", "manager_assistant"]
+    },
+    {
+      "http": "post",
+      "path": "/purchase",
+      "role": [ "accountant", "admin", "super_admin"]
+    },
+    {
+      "http": "patch",
+      "path": "/purchase/uid",
+      "role": [ "accountant", "admin", "super_admin"]
+    },
+    {
+      "http": "delete",
+      "path": "/purchase/uid",
+      "role": ["admin", "super_admin"]
+    }
+  ],
+  "purchase_items": [
+    {
+      "http": "get",
+      "path": "/purchase_items",
+      "role": [ "accountant", "admin", "super_admin","manager", "manager_assistant"]
+    },
+    {
+      "http": "get",
+      "path": "/purchase_items/uid",
+      "role": [ "accountant", "admin", "super_admin","manager", "manager_assistant"]
+    },
+    {
+      "http": "post",
+      "path": "/purchase_items",
+      "role": [ "accountant", "admin", "super_admin"]
+    },
+    {
+      "http": "patch",
+      "path": "/purchase_items/uid",
+      "role": [ "accountant", "admin", "super_admin"]
+    },
+    {
+      "http": "delete",
+      "path": "/purchase_items/uid",
+      "role": ["admin", "super_admin"]
+    }
+  ]
+}
